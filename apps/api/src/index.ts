@@ -1,16 +1,26 @@
-import Fastify from "fastify";
+import { buildServer } from "./server.js";
 
-const fastify = Fastify({
-  logger: true,
-});
+async function main() {
+  const server = await buildServer();
+  const port = Number(process.env.PORT) || 3001;
+  const host = process.env.HOST || "0.0.0.0";
 
-fastify.get("/", function (request, reply) {
-  reply.send({ hello: "world" });
-});
+  const signals: NodeJS.Signals[] = ["SIGINT", "SIGTERM"];
+  for (const signal of signals) {
+    process.on(signal, async () => {
+      server.log.info(`Received ${signal}, closing server gracefully...`);
+      await server.close();
+      process.exit(0);
+    });
+  }
 
-fastify.listen({ port: 3000 }, function (err, address) {
-  if (err) {
-    fastify.log.error(err);
+  try {
+    const address = await server.listen({ port, host });
+    server.log.info(`EduKids API server listening at ${address}`);
+  } catch (err) {
+    server.log.error(err);
     process.exit(1);
   }
-});
+}
+
+main();
