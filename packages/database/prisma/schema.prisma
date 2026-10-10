@@ -6,3 +6,34 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Student {
+  id        String         @id @default(cuid())
+  name      String
+  email     String         @unique
+  grade     Int
+  password  String
+  progress  GameProgress[]
+  createdAt DateTime       @default(now())
+}
+
+model Game {
+  id          String         @id @default(cuid())
+  title       String
+  category    String // "math" | "spelling" | "reading"
+  difficulty  Int
+  description String
+  progress    GameProgress[]
+}
+
+model GameProgress {
+  id        String   @id @default(cuid())
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  score     Int
+  duration  Int
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
