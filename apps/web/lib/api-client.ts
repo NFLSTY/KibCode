@@ -1,0 +1,110 @@
+import type {
+  RegisterStudentDTO,
+  LoginStudentDTO,
+  AuthResponseDTO,
+  StudentDTO,
+  GameDTO,
+  SaveProgressDTO,
+  GameProgressDTO,
+  GameCategory,
+} from "@edukids/types";
+
+const TOKEN_KEY = "edukids_token";
+
+export function getStoredToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setStoredToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+}
+
+class ApiError extends Error {
+  statusCode?: number;
+  issues?: Array<{ path: string; message: string }>;
+
+  constructor(message: string, statusCode?: number, issues?: Array<{ path: string; message: string }>) {
+    super(message);
+    this.name = "ApiError";
+    this.statusCode = statusCode;
+    this.issues = issues;
+  }
+}
+
+async function fetcher<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const token = getStoredToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(endpoint, {
+    ...options,
+    headers,
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new ApiError(
+      data.message || `Request failed with status ${res.status}`,
+      res.status,
+      data.issues
+    );
+  }
+
+  return data as T;
+}
+
+export const api = {
+  auth: {
+    register: (data: RegisterStudentDTO) =>
+      fetcher<AuthResponseDTO>("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    login: (data: LoginStudentDTO) =>
+      fetcher<AuthResponseDTO>("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+  },
+  students: {
+    getMe: () => fetcher<{ student: StudentDTO }>("/api/students/me"),
+  },
+  games: {
+    getAll: (category?: GameCategory) => {
+      const query = category ? `?category=${category}` : "";
+      return fetcher<{ games: GameDTO[] }>(`/api/games${query}`);
+    },
+    getById: (id: string) => fetcher<{ game: GameDTO }>(`/api/games/${id}`),
+  },
+  progress: {
+    save: (data: SaveProgressDTO) =>
+      fetcher<{ progress: GameProgressDTO }>("/api/progress", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    getByStudent: (studentId: string) =>
+      fetcher<{ progress: GameProgressDTO[] }>(`/api/progress/student/${studentId}`),
+    getSummary: (studentId: string) =>
+      fetcher<{
+        summary: {
+          studentId: string;
+          totalScore: number;
+          completedGamesCount: number;
+          totalTimeSpentSeconds: number;
+        };
+      }>(`/api/progress/student/${studentId}/summary`),
+  },
+};
