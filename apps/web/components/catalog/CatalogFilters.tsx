@@ -98,7 +98,7 @@ export function CatalogFilters({
       {/* Sorting & Grade Badge */}
       <div className="flex items-center gap-3 flex-wrap self-end lg:self-auto">
         {/* Sort Select */}
-        <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-[0_2px_0_#E2E8F0] min-h-[44px]">
+        <div className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-full border border-slate-200 shadow-[0_2px_0_#E2E8F0] min-h-[48px]">
           <ArrowDownUp className="w-4 h-4 text-blue-600" />
           <span className="text-xs sm:text-sm font-bold text-slate-500">
             Urutan:
@@ -116,7 +116,7 @@ export function CatalogFilters({
         </div>
 
         {/* Grade Indicator */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-950 border border-amber-300 shadow-[0_2px_0_#F59E0B] font-heading text-xs sm:text-sm font-bold min-h-[44px]">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amber-100 text-amber-950 border border-amber-300 shadow-[0_2px_0_#F59E0B] font-heading text-xs sm:text-sm font-bold min-h-[48px]">
           <ShieldCheck className="w-4 h-4 text-amber-700" />
           <span>
             Level: <strong>Kelas {grade} SD</strong>

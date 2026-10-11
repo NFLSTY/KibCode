@@ -45,7 +45,7 @@ export function QuizHeader({
         <button
           type="button"
           onClick={onExit}
-          className="group inline-flex items-center gap-2 bg-white text-slate-700 px-4 py-2 rounded-full border border-slate-200 shadow-[0_4px_0_#CBD5E1] hover:shadow-[0_2px_0_#CBD5E1] hover:translate-y-0.5 active:translate-y-1 active:shadow-none transition-all cursor-pointer font-heading text-sm font-bold min-h-[44px]"
+          className="group inline-flex items-center gap-2 bg-white text-slate-700 px-4 py-2.5 rounded-full border border-slate-200 shadow-[0_4px_0_#CBD5E1] hover:shadow-[0_2px_0_#CBD5E1] hover:translate-y-0.5 active:translate-y-1 active:shadow-none transition-all cursor-pointer font-heading text-sm font-bold min-h-[48px]"
         >
           <ArrowLeft className="w-4 h-4 text-blue-600 group-hover:-translate-x-0.5 transition-transform" />
           <span>Keluar Kuis</span>
@@ -53,7 +53,7 @@ export function QuizHeader({
       ) : (
         <Link
           href="/games"
-          className="group inline-flex items-center gap-2 bg-white text-slate-700 px-4 py-2 rounded-full border border-slate-200 shadow-[0_4px_0_#CBD5E1] hover:shadow-[0_2px_0_#CBD5E1] hover:translate-y-0.5 active:translate-y-1 active:shadow-none transition-all cursor-pointer font-heading text-sm font-bold min-h-[44px]"
+          className="group inline-flex items-center gap-2 bg-white text-slate-700 px-4 py-2.5 rounded-full border border-slate-200 shadow-[0_4px_0_#CBD5E1] hover:shadow-[0_2px_0_#CBD5E1] hover:translate-y-0.5 active:translate-y-1 active:shadow-none transition-all cursor-pointer font-heading text-sm font-bold min-h-[48px]"
         >
           <ArrowLeft className="w-4 h-4 text-blue-600 group-hover:-translate-x-0.5 transition-transform" />
           <span>Keluar Kuis</span>
