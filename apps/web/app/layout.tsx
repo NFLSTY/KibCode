@@ -17,9 +17,47 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "https://edukids.vercel.app"
+  ),
+  title: {
+    default: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+    template: "%s | EduKids",
+  },
   description:
-    "Platform edukasi interaktif untuk siswa SD: Matematika, Mengeja, dan Membaca dengan game seru, kuis, dan reward bintang.",
+    "Platform edukasi interaktif untuk siswa SD: Matematika, Mengeja, dan Membaca dengan game seru, kuis berhadiah bintang, dan kurikulum merdeka.",
+  keywords: [
+    "edukasi anak",
+    "game edukasi SD",
+    "matematika SD",
+    "belajar membaca",
+    "mengeja kata",
+    "kuis interaktif",
+    "kurikulum merdeka",
+    "edukids",
+  ],
+  authors: [{ name: "EduKids Team" }],
+  creator: "EduKids",
+  publisher: "EduKids",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "https://edukids.vercel.app",
+    siteName: "EduKids",
+    title: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+    description:
+      "Platform belajar interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+    description:
+      "Platform belajar interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
+  },
 };
 
 export default function RootLayout({
@@ -29,12 +67,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${fredoka.variable} ${nunito.variable} h-full`}>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-          rel="stylesheet"
-        />
-      </head>
       <body className="min-h-full flex flex-col bg-[#FFFBEB] text-[#1E293B] antialiased">
         {children}
       </body>
