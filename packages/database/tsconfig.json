@@ -1,9 +1,9 @@
 {
   "extends": "@edukids/typescript-config/node.json",
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
     "noEmit": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "prisma7.config.ts"]
 }
