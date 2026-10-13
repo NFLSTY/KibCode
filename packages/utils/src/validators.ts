@@ -10,6 +10,16 @@ export const registerStudentSchema = z.object({
 export const loginStudentSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
+  rememberMe: z.boolean().optional(),
+});
+
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string().min(1, "Refresh token is required"),
+});
+
+export const logoutSchema = z.object({
+  refreshToken: z.string().optional(),
+  allDevices: z.boolean().optional(),
 });
 
 export const createGameSchema = z.object({
