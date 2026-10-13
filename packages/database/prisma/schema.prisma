@@ -8,13 +8,28 @@ datasource db {
 }
 
 model Student {
-  id        String         @id @default(cuid())
+  id        String           @id @default(cuid())
   name      String
-  email     String         @unique
+  email     String           @unique
   grade     Int
   password  String
   progress  GameProgress[]
-  createdAt DateTime       @default(now())
+  sessions  StudentSession[]
+  createdAt DateTime         @default(now())
+}
+
+model StudentSession {
+  id         String   @id @default(cuid())
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId  String
+  tokenHash  String   @unique
+  deviceInfo String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([studentId])
+  @@index([tokenHash])
 }
 
 model Game {
