@@ -1,0 +1,98 @@
+import React from "react";
+import {
+  ArrowRight,
+  ArrowDown,
+  ArrowUp,
+  ArrowLeft,
+  ChevronsRight,
+  ChevronsDown,
+  ChevronsUp,
+  ChevronsLeft,
+} from "lucide-react";
+import { CommandConfig } from "./types";
+
+export const AVAILABLE_COMMANDS: CommandConfig[] = [
+  // 1. Maju (Gerak 1 Petak)
+  {
+    type: "RIGHT",
+    category: "move",
+    label: "Maju Kanan",
+    desc: "1 petak ke kanan",
+    icon: <ArrowRight className="w-4 h-4" />,
+    bg: "bg-blue-500 hover:bg-blue-600 text-white",
+    border: "border-blue-700",
+    badge: "➔ Kanan",
+  },
+  {
+    type: "DOWN",
+    category: "move",
+    label: "Maju Bawah",
+    desc: "1 petak ke bawah",
+    icon: <ArrowDown className="w-4 h-4" />,
+    bg: "bg-amber-400 hover:bg-amber-500 text-amber-950",
+    border: "border-amber-600",
+    badge: "⬇ Bawah",
+  },
+  {
+    type: "UP",
+    category: "move",
+    label: "Maju Atas",
+    desc: "1 petak ke atas",
+    icon: <ArrowUp className="w-4 h-4" />,
+    bg: "bg-indigo-500 hover:bg-indigo-600 text-white",
+    border: "border-indigo-700",
+    badge: "⬆ Atas",
+  },
+  {
+    type: "LEFT",
+    category: "move",
+    label: "Maju Kiri",
+    desc: "1 petak ke kiri",
+    icon: <ArrowLeft className="w-4 h-4" />,
+    bg: "bg-teal-500 hover:bg-teal-600 text-white",
+    border: "border-teal-700",
+    badge: "⬅ Kiri",
+  },
+
+  // 2. Lompat (Lompat 2 Petak)
+  {
+    type: "JUMP_RIGHT",
+    category: "jump",
+    label: "Lompat Kanan",
+    desc: "Lompat 2 petak ke kanan",
+    icon: <ChevronsRight className="w-4 h-4" />,
+    bg: "bg-rose-500 hover:bg-rose-600 text-white",
+    border: "border-rose-700",
+    badge: "⏩ Kanan",
+  },
+  {
+    type: "JUMP_DOWN",
+    category: "jump",
+    label: "Lompat Bawah",
+    desc: "Lompat 2 petak ke bawah",
+    icon: <ChevronsDown className="w-4 h-4" />,
+    bg: "bg-lime-400 hover:bg-lime-500 text-lime-950",
+    border: "border-lime-600",
+    badge: "⏬ Bawah",
+  },
+  {
+    type: "JUMP_UP",
+    category: "jump",
+    label: "Lompat Atas",
+    desc: "Lompat 2 petak ke atas",
+    icon: <ChevronsUp className="w-4 h-4" />,
+    bg: "bg-purple-500 hover:bg-purple-600 text-white",
+    border: "border-purple-700",
+    badge: "⏫ Atas",
+  },
+  {
+    type: "JUMP_LEFT",
+    category: "jump",
+    label: "Lompat Kiri",
+    desc: "Lompat 2 petak ke kiri",
+    icon: <ChevronsLeft className="w-4 h-4" />,
+    bg: "bg-orange-500 hover:bg-orange-600 text-white",
+    border: "border-orange-700",
+    badge: "⏪ Kiri",
+  },
+];
