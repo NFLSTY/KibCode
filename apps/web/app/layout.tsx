@@ -21,19 +21,19 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_APP_URL || "https://edukids.vercel.app"
   ),
   title: {
-    default: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+    default: "EduKids — Petualangan Coding & AI untuk Anak SD",
     template: "%s | EduKids",
   },
   description:
-    "Platform edukasi interaktif untuk siswa SD: Matematika, Mengeja, dan Membaca dengan game seru, kuis berhadiah bintang, dan kurikulum merdeka.",
+    "Platform edukasi coding dan kecerdasan buatan (AI) interaktif untuk siswa SD: pelajari logika algoritma, visual block coding, dan problem solving bersama Kibo!",
   keywords: [
-    "edukasi anak",
-    "game edukasi SD",
-    "matematika SD",
-    "belajar membaca",
-    "mengeja kata",
-    "kuis interaktif",
-    "kurikulum merdeka",
+    "coding anak",
+    "coding for kids",
+    "belajar coding anak SD",
+    "edukasi AI anak",
+    "visual block coding",
+    "kibo robot AI",
+    "algoritma anak SD",
     "edukids",
   ],
   authors: [{ name: "EduKids Team" }],
@@ -48,15 +48,15 @@ export const metadata: Metadata = {
     locale: "id_ID",
     url: "https://edukids.vercel.app",
     siteName: "EduKids",
-    title: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+    title: "EduKids — Petualangan Coding & AI untuk Anak SD",
     description:
-      "Platform belajar interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
+      "Platform belajar coding dan AI interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "EduKids — Belajar Jadi Petualangan Paling Seru!",
+    title: "EduKids — Petualangan Coding & AI untuk Anak SD",
     description:
-      "Platform belajar interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
+      "Platform belajar coding dan AI interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
   },
 };
 
@@ -66,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${fredoka.variable} ${nunito.variable} h-full`}>
+    <html lang="id" className={`${fredoka.variable} ${nunito.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col bg-[#FFFBEB] text-[#1E293B] antialiased">
         {children}
       </body>
