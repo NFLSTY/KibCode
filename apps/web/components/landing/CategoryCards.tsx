@@ -3,32 +3,29 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Gamepad2,
-  Calculator,
-  BookOpen,
-  SpellCheck,
+  Blocks,
+  Repeat,
+  Bot,
   Check,
   Star,
-  Headphones,
-  Trophy,
+  Sparkles,
   ArrowRight,
 } from "lucide-react";
 
-const CATEGORIES = [
+const CODING_TRACKS = [
   {
-    id: "math",
-    title: "Tantangan Berhitung & Logika",
-    subtitle: "120+ Mini Game Interaktif",
-    badge: "Kelas 1 - 6 SD",
+    id: "block-coding",
+    title: "Algoritma & Blok Visual",
+    subtitle: "Dasar Logika Tanpa Koding Rumit",
+    badge: "Kelas 1 - 3 SD",
     description:
-      "Kuis perkalian kilat, teka-teki pecahan pizza, dan petualangan bangun ruang yang mengasah pola pikir kritis anak.",
-    reward: "Dapatkan 150 Bintang/Misi",
+      "Belajar menyusun urutan perintah gerak karakter, melewati rintangan labirin, dan memahami konsep aksi sekuensial lewat balok warna-warni yang ramah anak.",
+    reward: "+150 XP / Level Selesai",
     rewardIcon: Star,
-    buttonText: "Jelajahi Matematika",
-    href: "/games?category=math",
-    accentColor: "blue",
-    icon: Calculator,
-    tags: ["Pecahan Visual", "Operasi Cepat", "Geometri Ceria"],
+    buttonText: "Jelajahi Blok Visual",
+    href: "/register",
+    icon: Blocks,
+    tags: ["Urutan Langkah", "Labirin Ceria", "Navigasi Arah"],
     styles: {
       cardBorder: "border-blue-100 hover:border-blue-300",
       iconBg: "bg-blue-100 text-blue-600",
@@ -40,19 +37,18 @@ const CATEGORIES = [
     },
   },
   {
-    id: "reading",
-    title: "Dunia Dongeng & Literasi",
-    subtitle: "Ratusan Dongeng Nusantara",
-    badge: "Cerita Bergambar",
+    id: "loops-logic",
+    title: "Loop & Percabangan Cerdas",
+    subtitle: "Efisiensi Kode & Pola Pikir Kritis",
+    badge: "Kelas 3 - 5 SD",
     description:
-      "Cerita rakyat Nusantara dengan audio narasi ramah anak, kosa kata kontekstual, dan kuis pemahaman bacaan yang menyenangkan!",
-    reward: "Dilengkapi Audio & Narasi",
-    rewardIcon: Headphones,
-    buttonText: "Buka Buku Cerita",
-    href: "/games?category=reading",
-    accentColor: "amber",
-    icon: BookOpen,
-    tags: ["Narasi Ramah", "Fabel Kancil", "Kuis Cerita"],
+      "Tingkatkan kemampuan memecahkan masalah dengan perulangan aksi (Loops) dan logika 'JIKA-MAKA' (If-Else) agar kode lebih ringkas dan pintar.",
+    reward: "+200 XP / Level Selesai",
+    rewardIcon: Sparkles,
+    buttonText: "Pelajari Logika Loop",
+    href: "/register",
+    icon: Repeat,
+    tags: ["Perulangan (Loop)", "Logika Jika-Maka", "Pencegah Bug"],
     styles: {
       cardBorder: "border-amber-100 hover:border-amber-300",
       iconBg: "bg-amber-100 text-amber-600",
@@ -64,19 +60,18 @@ const CATEGORIES = [
     },
   },
   {
-    id: "spelling",
-    title: "Lab Kata & Kosakata Juara",
-    subtitle: "Penguasaan Bahasa Indonesia",
-    badge: "Ejaan Cerdas",
+    id: "ai-robotics",
+    title: "Eksplorasi AI & Robotika Cilik",
+    subtitle: "Mengenal Cara Berpikir Kecerdasan Buatan",
+    badge: "Kelas 5 - 6 SD",
     description:
-      "Susun huruf acak, tebak gambar berima, dan latihan dikte interaktif agar ejaan bahasa Indonesia semakin fasih dan percaya diri!",
-    reward: "Latihan Ejaan Cepat & Seru",
-    rewardIcon: Trophy,
-    buttonText: "Mulai Mengeja",
-    href: "/games?category=spelling",
-    accentColor: "rose",
-    icon: SpellCheck,
-    tags: ["Susun Balok", "Dikte Mandiri", "Kata Berima"],
+      "Pahami cara robot dan AI mengenali suara dan gambar, berinteraksi dengan chatbot pintar Kibo, serta belajar melatih aturan logika digital masa depan.",
+    reward: "+250 XP / Level Selesai",
+    rewardIcon: Bot,
+    buttonText: "Mulai Petualangan AI",
+    href: "/register",
+    icon: Bot,
+    tags: ["Pengenalan Pola", "Sahabat AI Kibo", "Etika Digital Cilik"],
     styles: {
       cardBorder: "border-rose-100 hover:border-rose-300",
       iconBg: "bg-rose-100 text-rose-600",
@@ -89,69 +84,63 @@ const CATEGORIES = [
   },
 ];
 
+import { LandingSection, SectionHeader } from "./shared";
+
 export function CategoryCards() {
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <LandingSection id="kurikulum">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center gap-3 mb-12">
-        <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-wider">
-          <Gamepad2 className="w-4 h-4" />
-          <span>Pusat Pembelajaran Anak</span>
-        </div>
-        <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900">
-          Pilih Petualangan Belajarmu Hari Ini! 🎮📚
-        </h2>
-        <p className="text-slate-600 text-base sm:text-lg max-w-2xl font-medium">
-          Materi interaktif yang disusun bertingkat dari kelas 1 sampai kelas 6
-          SD dengan animasi riang dan umpan balik langsung.
-        </p>
-      </div>
+      <SectionHeader
+        eyebrow="Kurikulum Bertingkat SD"
+        title="3 Jalur Petualangan Coding Juara!"
+        description="Disesuaikan dengan tahap perkembangan kognitif anak usia 7-12 tahun, mengubah anak dari sekadar pengguna teknologi menjadi pencipta karya digital."
+      />
 
-      {/* 3 Bento Game-like Subject Cards */}
+      {/* 3 Bento Tracks */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {CATEGORIES.map((cat) => {
-          const Icon = cat.icon;
-          const RewardIcon = cat.rewardIcon;
+        {CODING_TRACKS.map((track) => {
+          const Icon = track.icon;
+          const RewardIcon = track.rewardIcon;
 
           return (
             <div
-              key={cat.id}
-              className={`group flex flex-col justify-between bg-white rounded-3xl p-6 sm:p-7 shadow-[0_10px_24px_-4px_rgba(30,41,59,0.06)] border-2 ${cat.styles.cardBorder} hover:-translate-y-2 transition-all duration-300 relative overflow-hidden`}
+              key={track.id}
+              className={`group flex flex-col justify-between bg-white rounded-3xl p-6 sm:p-7 shadow-[0_10px_24px_-4px_rgba(30,41,59,0.06)] border-2 ${track.styles.cardBorder} hover:-translate-y-2 transition-all duration-300 relative overflow-hidden`}
             >
               <div className="flex flex-col gap-5">
                 {/* Top: Icon + Badge */}
                 <div className="flex items-center justify-between">
                   <div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center ${cat.styles.iconBg} group-hover:scale-110 transition-transform shadow-sm`}
+                    className={`w-16 h-16 rounded-2xl flex items-center justify-center ${track.styles.iconBg} group-hover:scale-110 transition-transform shadow-sm`}
                   >
                     <Icon className="w-9 h-9" />
                   </div>
                   <span
-                    className={`font-heading text-xs font-bold px-3 py-1 rounded-full shadow-sm ${cat.styles.badgeBg}`}
+                    className={`font-heading text-xs font-bold px-3 py-1 rounded-full shadow-sm ${track.styles.badgeBg}`}
                   >
-                    {cat.badge}
+                    {track.badge}
                   </span>
                 </div>
 
                 {/* Title & Description */}
                 <div>
                   <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                    {cat.subtitle}
+                    {track.subtitle}
                   </span>
                   <h3 className="font-heading text-xl sm:text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">
-                    {cat.title}
+                    {track.title}
                   </h3>
                   <p className="text-slate-600 text-sm sm:text-base mt-2.5 leading-relaxed font-medium">
-                    {cat.description}
+                    {track.description}
                   </p>
                 </div>
 
                 {/* Feature Chips */}
                 <div className="flex flex-wrap gap-2 pt-1">
-                  {cat.tags.map((tag) => (
+                  {track.tags.map((tag) => (
                     <span
                       key={tag}
-                      className={`text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 border ${cat.styles.tagBg}`}
+                      className={`text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 border ${track.styles.tagBg}`}
                     >
                       <Check className="w-3.5 h-3.5" />
                       {tag}
@@ -163,17 +152,17 @@ export function CategoryCards() {
               {/* Card Footer: Reward & CTA */}
               <div className="mt-8 pt-5 border-t border-slate-100 flex flex-col gap-4">
                 <div
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border w-fit ${cat.styles.rewardBg}`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border w-fit ${track.styles.rewardBg}`}
                 >
                   <RewardIcon className="w-3.5 h-3.5" />
-                  <span>{cat.reward}</span>
+                  <span>{track.reward}</span>
                 </div>
 
                 <Link
-                  href={cat.href}
-                  className={`w-full flex items-center justify-center gap-2 py-3 rounded-full font-heading font-black text-base active:translate-y-1 transition-all min-h-[48px] ${cat.styles.btnBg}`}
+                  href={track.href}
+                  className={`w-full flex items-center justify-center gap-2 py-3 rounded-full font-heading font-black text-base active:translate-y-1 transition-all min-h-[48px] ${track.styles.btnBg}`}
                 >
-                  <span>{cat.buttonText}</span>
+                  <span>{track.buttonText}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
@@ -181,6 +170,6 @@ export function CategoryCards() {
           );
         })}
       </div>
-    </section>
+    </LandingSection>
   );
 }

@@ -1,51 +1,67 @@
 "use client";
 
 import React from "react";
-import { ShieldCheck, LineChart, Trophy } from "lucide-react";
+import { ShieldCheck, Brain, Trophy, Palette, Smile, TrendingUp } from "lucide-react";
 
 const PILLARS = [
   {
-    icon: ShieldCheck,
-    title: "Bebas Iklan & 100% Aman Anak",
+    icon: Brain,
+    title: "Mengasah Computational Thinking",
     description:
-      "Ruang belajar tertutup tanpa konten pihak ketiga, tanpa pelacak digital berbahaya, dan tampilan ramah bagi mata anak.",
-    iconColor: "text-amber-600 bg-amber-100",
-  },
-  {
-    icon: LineChart,
-    title: "Laporan Kemajuan untuk Orang Tua",
-    description:
-      "Pantau penguasaan topik belajar, durasi eksplorasi harian, dan materi yang memerlukan bimbingan tambahan secara transparan.",
+      "Melatih anak SD memecahkan tantangan besar menjadi langkah-langkah terstruktur, mengenali pola, dan berpikir analitis sejak dini.",
     iconColor: "text-blue-600 bg-blue-100",
   },
   {
-    icon: Trophy,
-    title: "Hadiah Bintang & Gamifikasi Positif",
+    icon: ShieldCheck,
+    title: "100% Aman & Bebas Iklan",
     description:
-      "Setiap kuis yang diselesaikan memberikan bintang reward untuk membangun kebiasaan belajar harian yang penuh semangat dan rasa percaya diri.",
+      "Ruang belajar ramah anak tanpa pelacak berbahaya, tanpa konten pihak ketiga, dan dirancang khusus melindungi privasi anak secara ketat.",
+    iconColor: "text-emerald-600 bg-emerald-100",
+  },
+  {
+    icon: Trophy,
+    title: "Gamifikasi & Bimbingan AI Positif",
+    description:
+      "Setiap baris kode yang diselesaikan memberikan XP, bintang prestasi, dan pujian semangat dari Kibo untuk membangun kepercayaan diri anak.",
+    iconColor: "text-amber-600 bg-amber-100",
+  },
+  {
+    icon: Palette,
+    title: "Memicu Daya Cipta & Kreativitas",
+    description:
+      "Anak tidak sekadar menjadi konsumen teknologi, tetapi aktif merancang animasi, puzzle logika, dan karya imajinatif digital mereka sendiri.",
     iconColor: "text-rose-600 bg-rose-100",
+  },
+  {
+    icon: Smile,
+    title: "Antarmuka Ramah Anak Usia SD",
+    description:
+      "Tombol besar, kontras warna yang nyaman, bahasa sederhana, dan bebas distraksi yang dirancang khusus bagi kenyamanan motorik anak 7–12 tahun.",
+    iconColor: "text-purple-600 bg-purple-100",
+  },
+  {
+    icon: TrendingUp,
+    title: "Pantauan Progres Belajar Nyata",
+    description:
+      "Tiap pencapaian logika terekam rapi, memudahkan orang tua dan guru melihat perkembangan daya nalar dan rasa percaya diri anak.",
+    iconColor: "text-teal-600 bg-teal-100",
   },
 ];
 
+import { LandingSection, SectionHeader } from "./shared";
+
 export function ParentFeatures() {
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <LandingSection id="fitur">
       {/* Section Header */}
-      <div className="text-center max-w-2xl mx-auto mb-12">
-        <span className="text-xs sm:text-sm font-bold text-blue-600 uppercase tracking-widest block mb-2">
-          Aman, Terpandu, &amp; Menyenangkan
-        </span>
-        <h2 className="font-heading text-3xl sm:text-4xl font-black text-slate-900">
-          Mengapa Anak &amp; Guru Suka EduKids?
-        </h2>
-        <p className="text-slate-600 text-base sm:text-lg mt-3 font-medium leading-relaxed">
-          Didesain dengan pendekatan ramah anak untuk menumbuhkan rasa ingin
-          tahu dan motivasi belajar secara alami.
-        </p>
-      </div>
+      <SectionHeader
+        eyebrow="Investasi Masa Depan Juara"
+        title="Mengapa Belajar Coding & AI Sejak SD?"
+        description="Bukan sekadar mencetak programmer, tetapi menumbuhkan rasa ingin tahu, kreativitas, dan daya juang anak dalam memecahkan masalah kehidupan nyata."
+      />
 
-      {/* 3 Pillars Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* 6 Pillars Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {PILLARS.map((pillar, idx) => {
           const Icon = pillar.icon;
           return (
@@ -70,6 +86,6 @@ export function ParentFeatures() {
           );
         })}
       </div>
-    </section>
+    </LandingSection>
   );
 }
