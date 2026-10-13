@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://edukids.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://kibcode.my.id";
   const now = new Date();
 
   return [

@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { GameService } from "../services/gameService.js";
-import { createGameSchema } from "@edukids/utils";
-import type { GameCategory } from "@edukids/types";
+import { createGameSchema } from "@kibcode/utils";
+import type { GameCategory } from "@kibcode/types";
 
 export class GameController {
   static async getAll(request: FastifyRequest, reply: FastifyReply) {

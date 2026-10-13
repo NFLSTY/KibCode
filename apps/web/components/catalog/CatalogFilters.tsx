@@ -2,7 +2,7 @@
 
 import React from "react";
 import { LayoutGrid, ArrowDownUp, ShieldCheck } from "lucide-react";
-import type { GameCategory } from "@edukids/types";
+import type { GameCategory } from "@kibcode/types";
 
 export type FilterCategory = "all" | GameCategory;
 export type SortOption = "popular" | "stars" | "difficulty-asc" | "difficulty-desc";

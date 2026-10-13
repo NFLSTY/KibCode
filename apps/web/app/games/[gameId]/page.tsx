@@ -15,7 +15,7 @@ import { DEFAULT_CATALOG_GAMES } from "@/lib/constants/catalog-games";
 import { getQuestionsForGame, type QuizQuestion } from "@/lib/constants/quiz-questions";
 import { api } from "@/lib/api-client";
 import { useAuth } from "@/lib/hooks/useAuth";
-import type { GameCategory } from "@edukids/types";
+import type { GameCategory } from "@kibcode/types";
 import { HeartHandshake, Smile } from "lucide-react";
 
 interface GameArenaProps {
@@ -186,7 +186,7 @@ export default function GameArenaPage({ params }: GameArenaProps) {
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-bold text-slate-500">
           <div className="flex items-center gap-1.5">
             <Smile className="w-4 h-4 text-amber-500" />
-            <span>Santai saja, belajar bersama EduKids itu menyenangkan!</span>
+            <span>Santai saja, belajar bersama KibCode itu menyenangkan!</span>
           </div>
           <span className="hidden md:inline">•</span>
           <div className="hidden md:flex items-center gap-1.5">

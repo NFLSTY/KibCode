@@ -7,9 +7,9 @@ import type {
   SaveProgressDTO,
   GameProgressDTO,
   GameCategory,
-} from "@edukids/types";
+} from "@kibcode/types";
 
-const TOKEN_KEY = "edukids_token";
+const TOKEN_KEY = "kibcode_token";
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;

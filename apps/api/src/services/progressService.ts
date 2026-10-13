@@ -1,5 +1,5 @@
-import type { PrismaClient } from "@edukids/database";
-import type { SaveProgressDTO, GameProgressDTO } from "@edukids/types";
+import type { PrismaClient } from "@kibcode/database";
+import type { SaveProgressDTO, GameProgressDTO } from "@kibcode/types";
 
 export interface StudentSummary {
   studentId: string;

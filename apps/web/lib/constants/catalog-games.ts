@@ -1,4 +1,4 @@
-import type { GameCategory } from "@edukids/types";
+import type { GameCategory } from "@kibcode/types";
 
 export interface CatalogGameItem {
   id: string;

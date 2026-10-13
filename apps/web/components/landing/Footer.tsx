@@ -16,7 +16,7 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-heading text-2xl font-bold tracking-tight text-blue-600 leading-none">
-                  Edu<span className="text-amber-500">Kids</span>
+                  Kib<span className="text-amber-500">Code</span>
                 </span>
                 <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">
                   Coding &amp; AI SD
@@ -72,7 +72,7 @@ export function Footer() {
 
         {/* Bottom Copyright */}
         <div className="mt-12 pt-6 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-500 font-medium">
-          <p>© {new Date().getFullYear()} EduKids. Belajar Ceria, Tumbuh Hebat!</p>
+          <p>© {new Date().getFullYear()} KibCode. Belajar Ceria, Tumbuh Hebat!</p>
           <p className="flex items-center gap-1 text-slate-600">
             Dibuat dengan <Heart className="w-4 h-4 fill-rose-500 text-rose-500 inline" /> untuk anak Indonesia
           </p>

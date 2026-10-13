@@ -10,7 +10,7 @@ packages/database/
 │   ├── db.ts                   # Neon adapter and client initialization
 │   └── seed.ts                 # Seed script (optional)
 ├── .env.example
-├── tsconfig.json               # Extends @edukids/typescript-config/base.json
+├── tsconfig.json               # Extends @kibcode/typescript-config/base.json
 ├── package.json
 └── README.md
 ```

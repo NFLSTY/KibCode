@@ -21,7 +21,7 @@ export function CatalogHero({ totalGames, grade = 3 }: CatalogHeroProps) {
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md self-center md:self-start w-fit border border-white/20">
             <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
             <span className="font-heading text-xs font-bold uppercase tracking-wider text-blue-100">
-              Zona Petualang EduKids SD
+              Zona Petualang KibCode SD
             </span>
           </div>
 

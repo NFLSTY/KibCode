@@ -1,8 +1,8 @@
 {
-  "name": "@edukids/utils",
+  "name": "@kibcode/utils",
   "version": "1.0.0",
   "type": "module",
-  "description": "Shared helpers, pure functions, and Zod validators for EduKids",
+  "description": "Shared helpers, pure functions, and Zod validators for KibCode",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {
@@ -12,7 +12,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@edukids/typescript-config": "workspace:*",
+    "@kibcode/typescript-config": "workspace:*",
     "typescript": "^5"
   }
 }

@@ -1,1 +1,1 @@
-export * from "@edukids/utils";
+export * from "@kibcode/utils";

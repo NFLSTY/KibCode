@@ -39,7 +39,7 @@ export default function RegisterPage() {
         password,
       });
 
-      showToast.success("Akun berhasil dibuat! Selamat datang di EduKids 🌟", {
+      showToast.success("Akun berhasil dibuat! Selamat datang di KibCode 🌟", {
         duration: 3000,
         progress: true,
         position: "top-right",
@@ -106,7 +106,7 @@ export default function RegisterPage() {
                 <GraduationCap className="w-5 h-5" />
               </div>
               <span className="font-heading text-2xl font-bold tracking-tight text-blue-600">
-                Edu<span className="text-amber-500">Kids</span>
+                Kib<span className="text-amber-500">Code</span>
               </span>
             </Link>
 

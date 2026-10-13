@@ -1,5 +1,5 @@
-import type { PrismaClient } from "@edukids/database";
-import type { GameDTO, CreateGameDTO, GameCategory } from "@edukids/types";
+import type { PrismaClient } from "@kibcode/database";
+import type { GameDTO, CreateGameDTO, GameCategory } from "@kibcode/types";
 
 export class GameService {
   constructor(private prisma: PrismaClient) {}

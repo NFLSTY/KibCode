@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { StudentService } from "../services/studentService.js";
-import { registerStudentSchema, loginStudentSchema } from "@edukids/utils";
+import { registerStudentSchema, loginStudentSchema } from "@kibcode/utils";
 
 export class StudentController {
   static async register(request: FastifyRequest, reply: FastifyReply) {

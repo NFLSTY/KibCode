@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { ProgressService } from "../services/progressService.js";
-import { saveProgressSchema } from "@edukids/utils";
+import { saveProgressSchema } from "@kibcode/utils";
 
 export class ProgressController {
   static async save(request: FastifyRequest, reply: FastifyReply) {

@@ -1,4 +1,4 @@
-# **Backend (`@edukids/api` — Fastify)**
+# **Backend (`@kibcode/api` — Fastify)**
 
 ```bash
 apps/api/
@@ -17,7 +17,7 @@ apps/api/
 │   │   ├── studentController.ts
 │   │   └── progressController.ts
 │   ├── services/
-│   │   ├── gameService.ts      # Business logic (queries @edukids/database)
+│   │   ├── gameService.ts      # Business logic (queries @kibcode/database)
 │   │   ├── studentService.ts
 │   │   └── progressService.ts
 │   ├── middleware/
@@ -25,7 +25,7 @@ apps/api/
 │   │   ├── errorHandler.ts     # Global error handler
 │   │   └── validation.ts       # Zod validation helpers
 │   ├── plugins/
-│   │   ├── db.ts               # Prisma plugin (imports from @edukids/database)
+│   │   ├── db.ts               # Prisma plugin (imports from @kibcode/database)
 │   │   ├── cors.ts             # Fastify CORS
 │   │   └── jwt.ts              # Fastify JWT
 │   ├── types/                  # Fastify type augmentations
@@ -36,7 +36,7 @@ apps/api/
 ├── tests/
 │   └── routes.test.ts
 ├── .env.example
-├── tsconfig.json               # Extends @edukids/typescript-config/node.json
+├── tsconfig.json               # Extends @kibcode/typescript-config/node.json
 ├── package.json
 └── README.md
 ```

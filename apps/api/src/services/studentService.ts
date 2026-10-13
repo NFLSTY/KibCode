@@ -1,5 +1,5 @@
-import type { PrismaClient } from "@edukids/database";
-import type { RegisterStudentDTO, LoginStudentDTO, StudentDTO } from "@edukids/types";
+import type { PrismaClient } from "@kibcode/database";
+import type { RegisterStudentDTO, LoginStudentDTO, StudentDTO } from "@kibcode/types";
 import bcrypt from "bcryptjs";
 
 export class StudentService {

@@ -22,7 +22,7 @@ describe("API Route Tests", () => {
 
     expect(response.statusCode).toBe(200);
     const body = JSON.parse(response.body);
-    expect(body.name).toBe("EduKids API");
+    expect(body.name).toBe("KibCode API");
     expect(body.status).toBe("running");
   });
 

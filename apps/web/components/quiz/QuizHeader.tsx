@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, Flame, Star, Calculator, BookOpen, SpellCheck } from "lucide-react";
-import type { GameCategory } from "@edukids/types";
+import type { GameCategory } from "@kibcode/types";
 
 interface QuizHeaderProps {
   gameTitle: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { StudentDTO, LoginStudentDTO, RegisterStudentDTO } from "@edukids/types";
+import type { StudentDTO, LoginStudentDTO, RegisterStudentDTO } from "@kibcode/types";
 import { api, getStoredToken, setStoredToken } from "@/lib/api-client";
 
 export function useAuth() {

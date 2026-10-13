@@ -1,6 +1,6 @@
-# **Types (`@edukids/types`)**
+# **Types (`@kibcode/types`)**
 
-Shared TypeScript DTOs, request/response interfaces, and domain types used across the EduKids web and api applications.
+Shared TypeScript DTOs, request/response interfaces, and domain types used across the KibCode web and api applications.
 
 ```bash
 packages/types/
@@ -12,7 +12,7 @@ packages/types/
 │   │   └── progress.ts         # Progress & Score tracking DTOs
 │   └── database/
 │       └── index.ts            # Common entity types
-├── tsconfig.json               # Extends @edukids/typescript-config/base.json
+├── tsconfig.json               # Extends @kibcode/typescript-config/base.json
 ├── package.json
 └── README.md
 ```

@@ -18,11 +18,11 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "https://edukids.vercel.app"
+    process.env.NEXT_PUBLIC_APP_URL || "https://kibcode.my.id"
   ),
   title: {
-    default: "EduKids — Petualangan Coding & AI untuk Anak SD",
-    template: "%s | EduKids",
+    default: "KibCode — Petualangan Coding & AI untuk Anak SD",
+    template: "%s | KibCode",
   },
   description:
     "Platform edukasi coding dan kecerdasan buatan (AI) interaktif untuk siswa SD: pelajari logika algoritma, visual block coding, dan problem solving bersama Kibo!",
@@ -34,11 +34,11 @@ export const metadata: Metadata = {
     "visual block coding",
     "kibo robot AI",
     "algoritma anak SD",
-    "edukids",
+    "KibCode",
   ],
-  authors: [{ name: "EduKids Team" }],
-  creator: "EduKids",
-  publisher: "EduKids",
+  authors: [{ name: "KibCode Team" }],
+  creator: "KibCode",
+  publisher: "KibCode",
   robots: {
     index: true,
     follow: true,
@@ -46,15 +46,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://edukids.vercel.app",
-    siteName: "EduKids",
-    title: "EduKids — Petualangan Coding & AI untuk Anak SD",
+    url: "https://kibcode.my.id",
+    siteName: "KibCode",
+    title: "KibCode — Petualangan Coding & AI untuk Anak SD",
     description:
       "Platform belajar coding dan AI interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "EduKids — Petualangan Coding & AI untuk Anak SD",
+    title: "KibCode — Petualangan Coding & AI untuk Anak SD",
     description:
       "Platform belajar coding dan AI interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
   },

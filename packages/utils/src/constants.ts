@@ -1,4 +1,4 @@
-export const APP_NAME = "EduKids";
+export const APP_NAME = "KibCode";
 
 export const GAME_CATEGORIES = ["math", "spelling", "reading"] as const;
 
@@ -8,3 +8,4 @@ export const UI_STANDARDS = {
   MIN_TOUCH_TARGET_PX: 48,
   MIN_FONT_SIZE_PX: 16,
 };
+

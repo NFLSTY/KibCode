@@ -65,7 +65,7 @@ export function KiboFeedback({
               className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full font-heading font-bold text-xs sm:text-sm shadow-md active:translate-y-0.5 transition-all"
             >
               <Rocket className="w-4 h-4" />
-              <span>Buka 50+ Tantangan Coding di EduKids</span>
+              <span>Buka 50+ Tantangan Coding di KibCode</span>
             </Link>
           </div>
         )}

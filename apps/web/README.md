@@ -1,4 +1,4 @@
-# **Frontend (`@edukids/web` — Next.js 14+)**
+# **Frontend (`@kibcode/web` — Next.js 14+)**
 
 ```bash
 apps/web/
@@ -36,7 +36,7 @@ apps/web/
 ├── public/
 ├── .env.example
 ├── next.config.ts
-├── tsconfig.json               # Extends @edukids/typescript-config/nextjs.json
+├── tsconfig.json               # Extends @kibcode/typescript-config/nextjs.json
 ├── package.json
 └── README.md
 ```

@@ -1,5 +1,5 @@
 {
-  "name": "@edukids/eslint-config",
+  "name": "@kibcode/eslint-config",
   "version": "0.0.0",
   "type": "module",
   "private": true,

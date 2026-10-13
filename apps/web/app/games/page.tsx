@@ -18,7 +18,7 @@ import {
 } from "@/lib/constants/catalog-games";
 import { api } from "@/lib/api-client";
 import { useAuth } from "@/lib/hooks/useAuth";
-import type { GameCategory } from "@edukids/types";
+import type { GameCategory } from "@kibcode/types";
 import { Loader2 } from "lucide-react";
 
 function GameCatalogContent() {

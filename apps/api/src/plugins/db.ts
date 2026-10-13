@@ -1,5 +1,5 @@
 import fp from "fastify-plugin";
-import { prisma } from "@edukids/database";
+import { prisma } from "@kibcode/database";
 import type { FastifyPluginAsync } from "fastify";
 
 const dbPlugin: FastifyPluginAsync = async (fastify) => {

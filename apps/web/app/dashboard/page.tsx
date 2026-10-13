@@ -10,7 +10,7 @@ import { RecentLessons } from "@/components/dashboard/RecentLessons";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { api } from "@/lib/api-client";
-import type { GameProgressDTO } from "@edukids/types";
+import type { GameProgressDTO } from "@kibcode/types";
 import { LogIn, Sparkles } from "lucide-react";
 
 export default function StudentDashboardPage() {

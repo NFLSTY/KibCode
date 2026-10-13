@@ -1,5 +1,5 @@
 {
-  "extends": "@edukids/typescript-config/base.json",
+  "extends": "@kibcode/typescript-config/base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",

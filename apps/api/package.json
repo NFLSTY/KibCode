@@ -1,7 +1,7 @@
 {
-  "name": "@edukids/api",
+  "name": "@kibcode/api",
   "version": "1.0.0",
-  "description": "Fastify backend service for EduKids",
+  "description": "Fastify backend service for KibCode",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -13,9 +13,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@edukids/database": "workspace:*",
-    "@edukids/types": "workspace:*",
-    "@edukids/utils": "workspace:*",
+    "@kibcode/database": "workspace:*",
+    "@kibcode/types": "workspace:*",
+    "@kibcode/utils": "workspace:*",
     "@fastify/cors": "^11.3.0",
     "@fastify/jwt": "^10.2.2",
     "bcryptjs": "^2.4.3",
@@ -25,8 +25,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@edukids/eslint-config": "workspace:*",
-    "@edukids/typescript-config": "workspace:*",
+    "@kibcode/eslint-config": "workspace:*",
+    "@kibcode/typescript-config": "workspace:*",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.14.0",
     "tsx": "^4.23.15",

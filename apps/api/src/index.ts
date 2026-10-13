@@ -16,7 +16,7 @@ async function main() {
 
   try {
     const address = await server.listen({ port, host });
-    server.log.info(`EduKids API server listening at ${address}`);
+    server.log.info(`KibCode API server listening at ${address}`);
   } catch (err) {
     server.log.error(err);
     process.exit(1);

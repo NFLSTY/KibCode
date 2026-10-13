@@ -1,6 +1,6 @@
-# **ESLint Configuration (`@edukids/eslint-config`)**
+# **ESLint Configuration (`@kibcode/eslint-config`)**
 
-Internal shared ESLint rules and flat configurations across the EduKids monorepo to ensure consistent code styling, prevent common bugs, and integrate smoothly with Next.js and React.
+Internal shared ESLint rules and flat configurations across the KibCode monorepo to ensure consistent code styling, prevent common bugs, and integrate smoothly with Next.js and React.
 
 ```bash
 packages/eslint-config/
@@ -16,13 +16,13 @@ packages/eslint-config/
 Import into your project's `eslint.config.mjs`:
 
 ```javascript
-import { config } from "@edukids/eslint-config/base";
+import { config } from "@kibcode/eslint-config/base";
 
 export default [...config];
 ```
 Or for Next.js applications:
 ```javascript
-import { nextJsConfig } from "@edukids/eslint-config/next-js";
+import { nextJsConfig } from "@kibcode/eslint-config/next-js";
 
 export default [...nextJsConfig];
 ```

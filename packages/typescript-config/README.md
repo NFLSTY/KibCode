@@ -1,6 +1,6 @@
-# **TypeScript Configuration (`@edukids/typescript-config`)**
+# **TypeScript Configuration (`@kibcode/typescript-config`)**
 
-Shared TypeScript configurations across the EduKids monorepo to ensure consistent compilation targets, module resolutions, and strict type-checking standards.
+Shared TypeScript configurations across the KibCode monorepo to ensure consistent compilation targets, module resolutions, and strict type-checking standards.
 
 ```bash
 packages/typescript-config/
@@ -18,17 +18,17 @@ Extend these configurations in individual app/package `tsconfig.json` files:
 
 ```json
 {
-  "extends": "@edukids/typescript-config/base.json"
+  "extends": "@kibcode/typescript-config/base.json"
 }
 ```
 Or for Next.js / Node.js projects:
 ```json
 {
-  "extends": "@edukids/typescript-config/nextjs.json"
+  "extends": "@kibcode/typescript-config/nextjs.json"
 }
 ```
 ```json
 {
-  "extends": "@edukids/typescript-config/node.json"
+  "extends": "@kibcode/typescript-config/node.json"
 }
 ```

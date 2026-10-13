@@ -26,7 +26,7 @@ export async function buildServer(): Promise<FastifyInstance> {
 
   // Root endpoint
   fastify.get("/", async () => {
-    return { name: "EduKids API", version: "1.0.0", status: "running" };
+    return { name: "KibCode API", version: "1.0.0", status: "running" };
   });
 
   return fastify;

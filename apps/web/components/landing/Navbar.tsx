@@ -86,7 +86,7 @@ export function Navbar() {
           </div>
           <div className="flex flex-col">
             <span className="font-heading text-2xl font-bold tracking-tight text-blue-600 leading-none">
-              Edu<span className="text-amber-500">Kids</span>
+              Kib<span className="text-amber-500">Code</span>
             </span>
             <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">
               Coding &amp; AI SD
@@ -104,11 +104,10 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className={`px-4 py-1.5 rounded-full font-bold text-sm transition-all duration-200 ${
-                  isActive
+                className={`px-4 py-1.5 rounded-full font-bold text-sm transition-all duration-200 ${isActive
                     ? "bg-blue-500 text-white shadow-sm"
                     : "text-slate-600 hover:text-blue-600 hover:bg-white/80"
-                }`}
+                  }`}
               >
                 {link.label}
               </a>
@@ -152,11 +151,10 @@ export function Navbar() {
                   handleNavClick(link.href);
                   setMobileMenuOpen(false);
                 }}
-                className={`px-4 py-2.5 rounded-xl font-bold text-base transition-colors ${
-                  isActive
+                className={`px-4 py-2.5 rounded-xl font-bold text-base transition-colors ${isActive
                     ? "bg-blue-500 text-white shadow-sm"
                     : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-                }`}
+                  }`}
               >
                 {link.label}
               </a>

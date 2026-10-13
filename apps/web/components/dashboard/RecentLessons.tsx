@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { History, ArrowRight, RotateCcw, Calculator, BookOpen, SpellCheck } from "lucide-react";
-import type { GameProgressDTO } from "@edukids/types";
+import type { GameProgressDTO } from "@kibcode/types";
 
 interface RecentLessonItem {
   id: string;

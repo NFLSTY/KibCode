@@ -20,13 +20,13 @@ importers:
 
   apps/api:
     dependencies:
-      '@edukids/database':
+      '@kibcode/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@edukids/types':
+      '@kibcode/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@edukids/utils':
+      '@kibcode/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       '@fastify/cors':
@@ -51,10 +51,10 @@ importers:
         specifier: ^3.23.8
         version: 3.25.76
     devDependencies:
-      '@edukids/eslint-config':
+      '@kibcode/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@edukids/typescript-config':
+      '@kibcode/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/bcryptjs':
@@ -75,10 +75,10 @@ importers:
 
   apps/web:
     dependencies:
-      '@edukids/types':
+      '@kibcode/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@edukids/utils':
+      '@kibcode/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       clsx:
@@ -103,10 +103,10 @@ importers:
         specifier: ^3.0.1
         version: 3.7.0
     devDependencies:
-      '@edukids/eslint-config':
+      '@kibcode/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@edukids/typescript-config':
+      '@kibcode/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
@@ -146,7 +146,7 @@ importers:
         specifier: ^18.0.5
         version: 18.0.5
     devDependencies:
-      '@edukids/typescript-config':
+      '@kibcode/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':
@@ -200,7 +200,7 @@ importers:
 
   packages/types:
     devDependencies:
-      '@edukids/typescript-config':
+      '@kibcode/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       typescript:
@@ -215,7 +215,7 @@ importers:
         specifier: ^3.23.8
         version: 3.25.76
     devDependencies:
-      '@edukids/typescript-config':
+      '@kibcode/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       typescript:

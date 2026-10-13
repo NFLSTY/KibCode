@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@edukids/database";
+import type { PrismaClient } from "@kibcode/database";
 import type { FastifyRequest, FastifyReply } from "fastify";
 
 declare module "fastify" {
