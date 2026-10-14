@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/landing/Navbar";
+import { DashboardNavbar } from "@/components/dashboard/DashboardNavbar";
 import { Footer } from "@/components/landing/Footer";
 import { CatalogHero } from "@/components/catalog/CatalogHero";
 import {
@@ -134,9 +134,9 @@ function GameCatalogContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
-      <Navbar />
+      <DashboardNavbar />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 flex flex-col gap-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-16 flex flex-col gap-6">
         {/* Catalog Hero Section */}
         <CatalogHero totalGames={games.length} grade={student?.grade || 3} />
 

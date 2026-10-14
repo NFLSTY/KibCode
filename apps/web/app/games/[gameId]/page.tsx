@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/landing/Navbar";
+import { DashboardNavbar } from "@/components/dashboard/DashboardNavbar";
 import { Footer } from "@/components/landing/Footer";
 import { QuizHeader } from "@/components/quiz/QuizHeader";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
@@ -133,9 +133,9 @@ export default function GameArenaPage({ params }: GameArenaProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
-      <Navbar />
+      <DashboardNavbar />
 
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-16 flex flex-col">
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-16 flex flex-col">
         {/* Top HUD */}
         <QuizHeader
           gameTitle={gameTitle}

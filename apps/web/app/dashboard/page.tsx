@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Navbar } from "@/components/landing/Navbar";
+import { DashboardNavbar } from "@/components/dashboard/DashboardNavbar";
 import { Footer } from "@/components/landing/Footer";
 import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
 import { MilestoneOverview } from "@/components/dashboard/MilestoneOverview";
@@ -41,10 +41,10 @@ export default function StudentDashboardPage() {
         }
 
         if (summaryRes && summaryRes.summary) {
-          setTotalScore(summaryRes.summary.totalScore || 450);
-          setCompletedCount(summaryRes.summary.completedGamesCount || 15);
+          setTotalScore(summaryRes.summary.totalScore ?? 0);
+          setCompletedCount(summaryRes.summary.completedGamesCount ?? 0);
           setTotalTimeMinutes(
-            Math.round((summaryRes.summary.totalTimeSpentSeconds || 9000) / 60)
+            Math.round((summaryRes.summary.totalTimeSpentSeconds ?? 0) / 60)
           );
         }
       } catch (err) {
@@ -64,9 +64,9 @@ export default function StudentDashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
-      <Navbar />
+      <DashboardNavbar totalStars={totalScore} streakDays={4} />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 flex flex-col gap-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-16 flex flex-col gap-8">
         {/* Guest Reassurance Banner */}
         {!student && !authLoading && (
           <div className="bg-gradient-to-r from-amber-100 to-amber-200 text-amber-950 px-5 py-3 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 border border-amber-300 shadow-sm text-center sm:text-left">
