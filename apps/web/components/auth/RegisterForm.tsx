@@ -34,7 +34,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         grade: 1, // Default elementary grade
       });
 
-      showToast.success("Akun berhasil dibuat! Selamat datang di KibCode 🌟", {
+      showToast.success("Akun berhasil dibuat! Yuk lengkapi profil petualangmu 🌟", {
         duration: 3000,
         progress: true,
         position: "top-right",
@@ -42,7 +42,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         sound: false,
       });
 
-      router.push("/dashboard");
+      router.push("/onboarding");
     } catch (err: unknown) {
       const message =
         err instanceof Error

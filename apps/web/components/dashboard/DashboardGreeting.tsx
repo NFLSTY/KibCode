@@ -6,6 +6,7 @@ import { Flame, Star, Award, Sparkles, User } from "lucide-react";
 interface DashboardGreetingProps {
   name: string;
   grade: number;
+  schoolName?: string | null;
   streakDays: number;
   totalStars: number;
 }
@@ -13,6 +14,7 @@ interface DashboardGreetingProps {
 export function DashboardGreeting({
   name,
   grade,
+  schoolName,
   streakDays,
   totalStars,
 }: DashboardGreetingProps) {
@@ -43,6 +45,11 @@ export function DashboardGreeting({
               </h1>
               <span className="text-3xl animate-bounce">🌟</span>
             </div>
+            {schoolName && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 mt-0.5">
+                🏫 <span>{schoolName}</span>
+              </span>
+            )}
             <p className="text-slate-600 text-sm sm:text-base font-semibold mt-1">
               Hebat! Rajin belajar{" "}
               <span className="text-blue-600 font-bold">

@@ -5,6 +5,7 @@ import type {
   RefreshTokenDTO,
   LogoutDTO,
   StudentDTO,
+  UpdateOnboardingDTO,
   GameDTO,
   SaveProgressDTO,
   GameProgressDTO,
@@ -108,6 +109,11 @@ export const api = {
   },
   students: {
     getMe: () => fetcher<{ student: StudentDTO }>("/api/students/me"),
+    updateOnboarding: (data: UpdateOnboardingDTO) =>
+      fetcher<{ message: string; student: StudentDTO }>("/api/students/onboarding", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
   },
   games: {
     getAll: (category?: GameCategory) => {

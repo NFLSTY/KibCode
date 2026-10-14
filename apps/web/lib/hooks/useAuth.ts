@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { StudentDTO, LoginStudentDTO, RegisterStudentDTO } from "@kibcode/types";
+import type { StudentDTO, LoginStudentDTO, RegisterStudentDTO, UpdateOnboardingDTO } from "@kibcode/types";
 import {
   api,
   getStoredToken,
@@ -62,8 +62,38 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
+    let isMounted = true;
+    const run = async () => {
+      const savedToken = getStoredToken();
+      if (!savedToken) {
+        if (isMounted) {
+          setStudent(null);
+          setToken(null);
+          setIsLoading(false);
+        }
+        return;
+      }
+      try {
+        if (isMounted) setToken(savedToken);
+        const res = await api.students.getMe();
+        if (isMounted) setStudent(res.student);
+      } catch {
+        if (isMounted) {
+          setStoredToken(null);
+          setStudent(null);
+          setToken(null);
+        }
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    run();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const login = async (credentials: LoginStudentDTO) => {
     setError(null);
@@ -107,6 +137,22 @@ export function useAuth() {
     }
   };
 
+  const completeOnboarding = async (data: UpdateOnboardingDTO) => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      const res = await api.students.updateOnboarding(data);
+      setStudent(res.student);
+      return res.student;
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Gagal menyimpan data awal. Silakan coba lagi.";
+      setError(msg);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = async (allDevices: boolean = true) => {
     const savedRefreshToken = getStoredRefreshToken();
     try {
@@ -131,6 +177,7 @@ export function useAuth() {
     error,
     login,
     register,
+    completeOnboarding,
     logout,
     refreshProfile: fetchProfile,
   };

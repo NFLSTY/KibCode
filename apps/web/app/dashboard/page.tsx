@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { DashboardNavbar } from "@/components/dashboard/DashboardNavbar";
 import { Footer } from "@/components/landing/Footer";
 import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
@@ -14,12 +15,20 @@ import type { GameProgressDTO } from "@kibcode/types";
 import { LogIn, Sparkles } from "lucide-react";
 
 export default function StudentDashboardPage() {
+  const router = useRouter();
   const { student, isLoading: authLoading } = useAuth();
 
   const [progressList, setProgressList] = useState<GameProgressDTO[]>([]);
   const [totalScore, setTotalScore] = useState(450);
   const [completedCount, setCompletedCount] = useState(15);
   const [totalTimeMinutes, setTotalTimeMinutes] = useState(150);
+
+  // If user is authenticated but hasn't completed one-time onboarding, redirect to /onboarding
+  useEffect(() => {
+    if (!authLoading && student && student.isOnboarded === false) {
+      router.replace("/onboarding");
+    }
+  }, [student, authLoading, router]);
 
   // Fetch student progress metrics if authenticated
   useEffect(() => {
@@ -91,6 +100,7 @@ export default function StudentDashboardPage() {
         <DashboardGreeting
           name={studentName}
           grade={studentGrade}
+          schoolName={student?.schoolName}
           streakDays={4}
           totalStars={totalScore}
         />
