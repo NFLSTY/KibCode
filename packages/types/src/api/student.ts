@@ -3,7 +3,22 @@ export interface StudentDTO {
   name: string;
   email: string;
   grade: number;
+  schoolName?: string | null;
+  hasCodingExp?: boolean;
+  codingExpLevel?: string | null;
+  favoriteInterest?: string | null;
+  learningGoal?: string | null;
+  isOnboarded?: boolean;
   createdAt: string;
+}
+
+export interface UpdateOnboardingDTO {
+  grade: number;
+  schoolName: string;
+  hasCodingExp: boolean;
+  codingExpLevel?: string | null;
+  favoriteInterest?: string | null;
+  learningGoal?: string | null;
 }
 
 export interface RegisterStudentDTO {
