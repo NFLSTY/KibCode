@@ -8,6 +8,7 @@ export const registerStudentSchema = z.object({
 });
 
 export const updateOnboardingSchema = z.object({
+  name: z.string().min(2, "Nama minimal 2 karakter").max(60).optional(),
   grade: z.number().int().min(1, "Kelas harus antara 1 dan 6").max(6, "Kelas harus antara 1 dan 6"),
   schoolName: z.string().min(2, "Nama sekolah minimal 2 karakter").max(100, "Nama sekolah maksimal 100 karakter"),
   hasCodingExp: z.boolean(),
@@ -33,9 +34,45 @@ export const logoutSchema = z.object({
 
 export const createGameSchema = z.object({
   title: z.string().min(2, "Title is too short"),
-  category: z.enum(["math", "spelling", "reading"]),
+  category: z.enum([
+    "logic",
+    "loops",
+    "conditionals",
+    "debugging",
+    "algorithms",
+    "general",
+    "math",
+    "spelling",
+    "reading",
+  ]),
   difficulty: z.number().int().min(1).max(5),
   description: z.string().min(5, "Description is too short"),
+  questions: z.array(z.any()).optional(),
+});
+
+export const generateGameSchema = z.object({
+  topic: z.string().min(2, "Topik minimal 2 karakter"),
+  category: z
+    .enum(["logic", "loops", "conditionals", "debugging", "algorithms", "general"])
+    .optional(),
+  grade: z.number().int().min(1).max(6).optional(),
+  difficulty: z.number().int().min(1).max(3).optional(),
+});
+
+export const askHintSchema = z.object({
+  question: z.string().min(3),
+  storyPrompt: z.string().optional(),
+  codeSnippet: z.string().optional(),
+  grade: z.number().int().min(1).max(6).optional(),
+});
+
+export const reviewGameSchema = z.object({
+  gameTitle: z.string().min(2),
+  score: z.number().int().min(0),
+  correctAnswers: z.number().int().min(0),
+  totalQuestions: z.number().int().min(1),
+  durationSeconds: z.number().int().min(0),
+  grade: z.number().int().min(1).max(6).optional(),
 });
 
 export const saveProgressSchema = z.object({

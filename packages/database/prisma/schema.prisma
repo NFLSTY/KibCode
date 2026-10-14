@@ -42,9 +42,10 @@ model StudentSession {
 model Game {
   id          String         @id @default(cuid())
   title       String
-  category    String // "math" | "spelling" | "reading"
+  category    String // "logic" | "loops" | "conditionals" | "debugging" | "algorithms"
   difficulty  Int
   description String
+  questions   Json?
   progress    GameProgress[]
 }
 
