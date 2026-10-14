@@ -2,7 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import type { StudentDTO, LoginStudentDTO, RegisterStudentDTO } from "@kibcode/types";
-import { api, getStoredToken, setStoredToken } from "@/lib/api-client";
+import {
+  api,
+  getStoredToken,
+  setStoredToken,
+  getStoredRefreshToken,
+  setStoredRefreshToken,
+} from "@/lib/api-client";
 
 export function useAuth() {
   const [student, setStudent] = useState<StudentDTO | null>(null);
@@ -12,24 +18,47 @@ export function useAuth() {
 
   const fetchProfile = useCallback(async () => {
     const savedToken = getStoredToken();
-    if (!savedToken) {
-      setStudent(null);
-      setToken(null);
-      setIsLoading(false);
-      return;
+    const savedRefreshToken = getStoredRefreshToken();
+
+    // 1. If we have a saved access token, try fetching profile
+    if (savedToken) {
+      try {
+        setToken(savedToken);
+        const res = await api.students.getMe();
+        setStudent(res.student);
+        setIsLoading(false);
+        return;
+      } catch {
+        // Access token might be expired. Continue to try refresh token rotation below.
+      }
     }
 
-    try {
-      setToken(savedToken);
-      const res = await api.students.getMe();
-      setStudent(res.student);
-    } catch {
+    // 2. If access token was missing or expired, attempt token rotation via persistent refresh token
+    if (savedRefreshToken) {
+      try {
+        const res = await api.auth.refresh({ refreshToken: savedRefreshToken });
+        setStoredToken(res.token);
+        setToken(res.token);
+        if (res.refreshToken) {
+          setStoredRefreshToken(res.refreshToken);
+        }
+        setStudent(res.student);
+        setIsLoading(false);
+        return;
+      } catch {
+        // Refresh token failed (e.g., expired > 7 days, revoked, or device mismatch)
+        setStoredToken(null);
+        setStoredRefreshToken(null);
+        setStudent(null);
+        setToken(null);
+      }
+    } else {
       setStoredToken(null);
       setStudent(null);
       setToken(null);
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -44,6 +73,11 @@ export function useAuth() {
       setStoredToken(res.token);
       setToken(res.token);
       setStudent(res.student);
+      if (res.refreshToken) {
+        setStoredRefreshToken(res.refreshToken);
+      } else {
+        setStoredRefreshToken(null);
+      }
       return res.student;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Gagal masuk. Periksa email dan kata sandi.";
@@ -62,6 +96,7 @@ export function useAuth() {
       setStoredToken(res.token);
       setToken(res.token);
       setStudent(res.student);
+      setStoredRefreshToken(null);
       return res.student;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Gagal mendaftar. Silakan coba lagi.";
@@ -72,10 +107,21 @@ export function useAuth() {
     }
   };
 
-  const logout = () => {
-    setStoredToken(null);
-    setStudent(null);
-    setToken(null);
+  const logout = async (allDevices: boolean = true) => {
+    const savedRefreshToken = getStoredRefreshToken();
+    try {
+      await api.auth.logout({
+        refreshToken: savedRefreshToken || undefined,
+        allDevices,
+      });
+    } catch {
+      // Invalidate locally regardless of network outcome
+    } finally {
+      setStoredToken(null);
+      setStoredRefreshToken(null);
+      setStudent(null);
+      setToken(null);
+    }
   };
 
   return {

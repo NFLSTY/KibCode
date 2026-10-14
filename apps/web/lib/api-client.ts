@@ -2,6 +2,8 @@ import type {
   RegisterStudentDTO,
   LoginStudentDTO,
   AuthResponseDTO,
+  RefreshTokenDTO,
+  LogoutDTO,
   StudentDTO,
   GameDTO,
   SaveProgressDTO,
@@ -10,6 +12,7 @@ import type {
 } from "@kibcode/types";
 
 const TOKEN_KEY = "kibcode_token";
+const REFRESH_TOKEN_KEY = "kibcode_refresh_token";
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -22,6 +25,20 @@ export function setStoredToken(token: string | null): void {
     localStorage.setItem(TOKEN_KEY, token);
   } else {
     localStorage.removeItem(TOKEN_KEY);
+  }
+}
+
+export function getStoredRefreshToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
+export function setStoredRefreshToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  if (token) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
   }
 }
 
@@ -77,6 +94,16 @@ export const api = {
       fetcher<AuthResponseDTO>("/api/auth/login", {
         method: "POST",
         body: JSON.stringify(data),
+      }),
+    refresh: (data: RefreshTokenDTO) =>
+      fetcher<AuthResponseDTO>("/api/auth/refresh", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    logout: (data?: LogoutDTO) =>
+      fetcher<{ success: boolean; message: string }>("/api/auth/logout", {
+        method: "POST",
+        body: JSON.stringify(data || {}),
       }),
   },
   students: {
