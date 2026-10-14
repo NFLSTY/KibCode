@@ -25,11 +25,11 @@ export function OnboardingHeader({
     : Math.round(((currentStep - 1) / totalSteps) * 100);
 
   const stepMessages: Record<number, string> = {
-    1: `Halo ${studentName}! Kelas berapa kamu sekarang? 🎒`,
-    2: "Wah keren! Apa nama sekolah tempatmu belajar? 🏫",
-    3: "Pernahkah kamu mencoba koding sebelumnya? 💻",
-    4: "Pilih topik dan target yang paling seru buat kamu! 🚀",
-    5: `Hore ${studentName}! Semua pertanyaan selesai, kamu siap berpetualang! 🌟`,
+    1: `Halo ${studentName}! Kelas berapa kamu sekarang?`,
+    2: "Wah keren! Apa nama sekolah tempatmu belajar?",
+    3: "Pernahkah kamu mencoba koding sebelumnya?",
+    4: "Pilih topik dan target yang paling seru buat kamu!",
+    5: `Hore ${studentName}! Semua pertanyaan selesai, kamu siap berpetualang!`,
   };
 
   return (

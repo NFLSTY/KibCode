@@ -13,6 +13,7 @@ export interface StudentDTO {
 }
 
 export interface UpdateOnboardingDTO {
+  name?: string;
   grade: number;
   schoolName: string;
   hasCodingExp: boolean;

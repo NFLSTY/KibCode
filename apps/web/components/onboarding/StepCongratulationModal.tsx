@@ -55,15 +55,81 @@ export function StepCongratulationModal({
   useEffect(() => {
     if (typeof window === "undefined" || !isOpen) return;
 
-    const doc = window.document;
-    const originalOverflow = doc.body.style.overflow;
-    const originalTouchAction = doc.body.style.touchAction;
-    doc.body.style.overflow = "hidden";
-    doc.body.style.touchAction = "none";
+    const docEl = document.documentElement;
+    const body = document.body;
+    const scrollY = window.scrollY;
+
+    const originalHtmlOverflow = docEl.style.overflow;
+    const originalHtmlOverscroll = docEl.style.overscrollBehavior;
+    const originalBodyOverflow = body.style.overflow;
+    const originalBodyPosition = body.style.position;
+    const originalBodyTop = body.style.top;
+    const originalBodyWidth = body.style.width;
+    const originalBodyOverscroll = body.style.overscrollBehavior;
+    const originalBodyTouchAction = body.style.touchAction;
+
+    // Freeze page completely and avoid bounce/rubber-banding
+    docEl.style.overflow = "hidden";
+    docEl.style.overscrollBehavior = "none";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.overscrollBehavior = "none";
+    body.style.touchAction = "none";
+
+    // Prevent accidental wheel & touch events outside scrollable modal dialog
+    const preventScroll = (e: Event) => {
+      const target = e.target as HTMLElement | null;
+      const scrollable = target?.closest("[data-scrollable='true']");
+      if (!scrollable && e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    // Prevent keyboard scroll keys from scrolling background
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const blockedKeys = [
+        "Space",
+        "ArrowUp",
+        "ArrowDown",
+        "PageUp",
+        "PageDown",
+        "Home",
+        "End",
+      ];
+      if (blockedKeys.includes(e.code) || blockedKeys.includes(e.key)) {
+        const target = e.target as HTMLElement | null;
+        if (
+          target?.tagName === "INPUT" ||
+          target?.tagName === "TEXTAREA" ||
+          target?.closest("[data-scrollable='true']")
+        ) {
+          return;
+        }
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", preventScroll, { passive: false });
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      doc.body.style.overflow = originalOverflow;
-      doc.body.style.touchAction = originalTouchAction;
+      docEl.style.overflow = originalHtmlOverflow;
+      docEl.style.overscrollBehavior = originalHtmlOverscroll;
+      body.style.overflow = originalBodyOverflow;
+      body.style.position = originalBodyPosition;
+      body.style.top = originalBodyTop;
+      body.style.width = originalBodyWidth;
+      body.style.overscrollBehavior = originalBodyOverscroll;
+      body.style.touchAction = originalBodyTouchAction;
+
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      window.removeEventListener("keydown", handleKeyDown);
+
+      window.scrollTo(0, scrollY);
     };
   }, [isOpen]);
 
@@ -78,7 +144,12 @@ export function StepCongratulationModal({
     : "Mulai dari Awal (Pemula Cilik) 🌱";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden select-none">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="congratulation-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden select-none overscroll-none touch-none"
+    >
       {/* Backdrop: inactive and locked */}
       <div
         className="fixed inset-0 bg-slate-900/65 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
@@ -89,7 +160,10 @@ export function StepCongratulationModal({
       <ConfettiOverlay />
 
       {/* Modal Dialog Pop-up Card */}
-      <div className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(30,41,59,0.35)] border-4 border-amber-300 z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center text-center my-auto">
+      <div
+        data-scrollable="true"
+        className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto overscroll-contain bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(30,41,59,0.35)] border-4 border-amber-300 z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center text-center my-auto"
+      >
         {/* Mascot Avatar with celebratory glow */}
         <div className="relative mt-1 mb-3">
           <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-3xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center shadow-[0_6px_0_#F59E0B] animate-slow-bounce">
@@ -109,7 +183,10 @@ export function StepCongratulationModal({
           <span>Selamat, {studentName}!</span>
         </div>
 
-        <h2 className="font-heading text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
+        <h2
+          id="congratulation-title"
+          className="font-heading text-2xl sm:text-3xl font-black text-slate-800 tracking-tight"
+        >
           Profil Petualangmu Siap!
         </h2>
         <p className="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed font-semibold max-w-sm">
@@ -203,7 +280,7 @@ export function StepCongratulationModal({
             disabled={isSubmitting}
             icon={<Rocket className="w-5 h-5" />}
           >
-            {isSubmitting ? "Menyiapkan Petualangan..." : "Mulai Belajar Sekarang! 🚀"}
+            {isSubmitting ? "Menyiapkan Petualangan..." : "Mulai Belajar Sekarang!"}
           </CTAButton>
         </div>
       </div>

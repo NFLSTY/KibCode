@@ -70,8 +70,8 @@ export function OnboardingWizard() {
       return;
     }
 
-    // Scroll back to top, set progress to 100%, and pop up the outro congratulation card
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scroll back to top instantly, set progress to 100%, and pop up the outro congratulation card
+    window.scrollTo({ top: 0, behavior: "instant" });
     setShowOutroModal(true);
   };
 

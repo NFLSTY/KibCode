@@ -104,6 +104,7 @@ export class StudentService {
     const updated = await this.prisma.student.update({
       where: { id },
       data: {
+        ...(data.name ? { name: data.name } : {}),
         grade: data.grade,
         schoolName: data.schoolName,
         hasCodingExp: data.hasCodingExp,
