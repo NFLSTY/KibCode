@@ -62,4 +62,18 @@ describe("API Route Tests", () => {
 
     expect(response.statusCode).toBe(401);
   });
+
+  it("PUT /api/students/onboarding returns 401 without authentication", async () => {
+    const response = await server.inject({
+      method: "PUT",
+      url: "/api/students/onboarding",
+      payload: {
+        grade: 3,
+        schoolName: "SD Nusantara",
+        hasCodingExp: false,
+      },
+    });
+
+    expect(response.statusCode).toBe(401);
+  });
 });

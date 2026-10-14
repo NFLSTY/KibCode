@@ -6,6 +6,7 @@ import {
   loginStudentSchema,
   refreshTokenSchema,
   logoutSchema,
+  updateOnboardingSchema,
 } from "@kibcode/utils";
 
 export class StudentController {
@@ -121,5 +122,21 @@ export class StudentController {
     }
 
     return reply.send({ student });
+  }
+
+  static async updateOnboarding(request: FastifyRequest, reply: FastifyReply) {
+    const userPayload = request.user as { id: string } | undefined;
+    if (!userPayload?.id) {
+      return reply.status(401).send({ error: "Unauthorized", message: "User not authenticated" });
+    }
+
+    const validatedData = updateOnboardingSchema.parse(request.body);
+    const service = new StudentService(request.server.prisma);
+    const student = await service.updateOnboarding(userPayload.id, validatedData);
+
+    return reply.send({
+      message: "Profil awal berhasil disimpan!",
+      student,
+    });
   }
 }

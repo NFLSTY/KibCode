@@ -1,9 +1,37 @@
 import type { PrismaClient } from "@kibcode/database";
-import type { RegisterStudentDTO, LoginStudentDTO, StudentDTO } from "@kibcode/types";
+import type { RegisterStudentDTO, LoginStudentDTO, StudentDTO, UpdateOnboardingDTO } from "@kibcode/types";
 import bcrypt from "bcryptjs";
 
 export class StudentService {
   constructor(private prisma: PrismaClient) {}
+
+  private toDTO(student: {
+    id: string;
+    name: string;
+    email: string;
+    grade: number;
+    schoolName: string | null;
+    hasCodingExp: boolean;
+    codingExpLevel: string | null;
+    favoriteInterest: string | null;
+    learningGoal: string | null;
+    isOnboarded: boolean;
+    createdAt: Date;
+  }): StudentDTO {
+    return {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      grade: student.grade,
+      schoolName: student.schoolName,
+      hasCodingExp: student.hasCodingExp,
+      codingExpLevel: student.codingExpLevel,
+      favoriteInterest: student.favoriteInterest,
+      learningGoal: student.learningGoal,
+      isOnboarded: student.isOnboarded,
+      createdAt: student.createdAt.toISOString(),
+    };
+  }
 
   async register(data: RegisterStudentDTO): Promise<StudentDTO> {
     const existing = await this.prisma.student.findUnique({
@@ -24,16 +52,11 @@ export class StudentService {
         email: data.email,
         grade: data.grade,
         password: hashedPassword,
+        isOnboarded: false,
       },
     });
 
-    return {
-      id: student.id,
-      name: student.name,
-      email: student.email,
-      grade: student.grade,
-      createdAt: student.createdAt.toISOString(),
-    };
+    return this.toDTO(student);
   }
 
   async login(data: LoginStudentDTO): Promise<StudentDTO> {
@@ -54,13 +77,7 @@ export class StudentService {
       throw error;
     }
 
-    return {
-      id: student.id,
-      name: student.name,
-      email: student.email,
-      grade: student.grade,
-      createdAt: student.createdAt.toISOString(),
-    };
+    return this.toDTO(student);
   }
 
   async getById(id: string): Promise<StudentDTO | null> {
@@ -70,12 +87,33 @@ export class StudentService {
 
     if (!student) return null;
 
-    return {
-      id: student.id,
-      name: student.name,
-      email: student.email,
-      grade: student.grade,
-      createdAt: student.createdAt.toISOString(),
-    };
+    return this.toDTO(student);
+  }
+
+  async updateOnboarding(id: string, data: UpdateOnboardingDTO): Promise<StudentDTO> {
+    const existing = await this.prisma.student.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      const error = new Error("Student not found");
+      (error as unknown as { statusCode: number }).statusCode = 404;
+      throw error;
+    }
+
+    const updated = await this.prisma.student.update({
+      where: { id },
+      data: {
+        grade: data.grade,
+        schoolName: data.schoolName,
+        hasCodingExp: data.hasCodingExp,
+        codingExpLevel: data.codingExpLevel ?? null,
+        favoriteInterest: data.favoriteInterest ?? null,
+        learningGoal: data.learningGoal ?? null,
+        isOnboarded: true,
+      },
+    });
+
+    return this.toDTO(updated);
   }
 }
