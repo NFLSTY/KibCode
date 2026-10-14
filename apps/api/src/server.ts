@@ -24,7 +24,7 @@ export async function buildServer(): Promise<FastifyInstance> {
   // Routes prefixed with /api
   await fastify.register(registerRoutes, { prefix: "/api" });
 
-  // Root endpoint
+  // Health and root endpoint
   fastify.get("/", async () => {
     return { name: "KibCode API", version: "1.0.0", status: "running" };
   });
