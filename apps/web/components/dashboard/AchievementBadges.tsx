@@ -4,66 +4,79 @@ import React from "react";
 import Link from "next/link";
 import { Award, Rocket, PlayCircle } from "lucide-react";
 
-interface BadgeItem {
-  id: string;
-  icon: string;
-  name: string;
-  status: "achieved" | "in_progress" | "locked";
-  statusText: string;
-  description: string;
-  progressTag?: string;
-  badgeBg: string;
+interface AchievementBadgesProps {
+  completedCount?: number;
+  totalScore?: number;
 }
 
-export function AchievementBadges() {
-  const badges: BadgeItem[] = [
+export function AchievementBadges({
+  completedCount = 0,
+  totalScore = 0,
+}: AchievementBadgesProps) {
+  const badges = [
     {
       id: "b-1",
-      icon: "🌟",
-      name: "Bintang Cilik",
-      status: "achieved",
-      statusText: "Tercapai",
-      description: "Selesaikan 10 misi",
-      badgeBg: "bg-amber-100 border border-amber-300",
+      icon: "🌱",
+      name: "Langkah Pertama",
+      achieved: completedCount >= 1,
+      statusText: completedCount >= 1 ? "Tercapai" : "Terkunci",
+      description: "Selesaikan 1 game koding",
+      badgeBg:
+        completedCount >= 1
+          ? "bg-emerald-50 border border-emerald-300"
+          : "bg-slate-100/80 border border-slate-200 opacity-70",
     },
     {
       id: "b-2",
-      icon: "🔢",
-      name: "Jago Hitung",
-      status: "achieved",
-      statusText: "Tercapai",
-      description: "Skor 100 Matematika",
-      badgeBg: "bg-blue-100 border border-blue-300",
+      icon: "⭐",
+      name: "Bintang Cilik",
+      achieved: totalScore >= 50,
+      statusText: totalScore >= 50 ? "Tercapai" : "Terkunci",
+      description: "Kumpulkan 50 poin skor",
+      badgeBg:
+        totalScore >= 50
+          ? "bg-amber-100 border border-amber-300"
+          : "bg-slate-100/80 border border-slate-200 opacity-70",
     },
     {
       id: "b-3",
-      icon: "📚",
-      name: "Kutu Buku",
-      status: "achieved",
-      statusText: "Tercapai",
-      description: "Membaca 5 cerita",
-      badgeBg: "bg-rose-100 border border-rose-300",
+      icon: "🧮",
+      name: "Jago Hitung",
+      achieved: totalScore >= 150,
+      statusText: totalScore >= 150 ? "Tercapai" : "Terkunci",
+      description: "Kumpulkan 150 poin skor",
+      badgeBg:
+        totalScore >= 150
+          ? "bg-blue-100 border border-blue-300"
+          : "bg-slate-100/80 border border-slate-200 opacity-70",
     },
     {
       id: "b-4",
-      icon: "⚡",
-      name: "Kilat Juara",
-      status: "in_progress",
-      statusText: "Sedang Berjalan",
-      description: "9 dari 10 kuis kilat",
-      progressTag: "9/10",
-      badgeBg: "bg-amber-50/80 border border-amber-200",
+      icon: "🚀",
+      name: "Petualang Koding",
+      achieved: completedCount >= 5,
+      statusText: completedCount >= 5 ? "Tercapai" : "Terkunci",
+      description: "Selesaikan 5 game koding",
+      badgeBg:
+        completedCount >= 5
+          ? "bg-purple-100 border border-purple-300"
+          : "bg-slate-100/80 border border-slate-200 opacity-70",
     },
     {
       id: "b-5",
-      icon: "🔒",
-      name: "Misteri",
-      status: "locked",
-      statusText: "Terkunci",
-      description: "Buka di Level 4",
-      badgeBg: "bg-slate-100 border border-slate-200 opacity-75",
+      icon: "⚡",
+      name: "Kilat Juara",
+      achieved: totalScore >= 300,
+      statusText: totalScore >= 300 ? "Tercapai" : "Terkunci",
+      description: "Kumpulkan 300 poin skor",
+      badgeBg:
+        totalScore >= 300
+          ? "bg-amber-100 border border-amber-300"
+          : "bg-slate-100/80 border border-slate-200 opacity-70",
     },
   ];
+
+  const achievedCount = badges.filter((b) => b.achieved).length;
 
   return (
     <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_10px_24px_-4px_rgba(30,41,59,0.08)] border border-slate-100 flex flex-col gap-6">
@@ -76,7 +89,10 @@ export function AchievementBadges() {
           </h2>
         </div>
         <span className="font-heading text-xs sm:text-sm font-bold text-slate-500">
-          Terkumpul: <strong className="text-blue-600 font-black">3 dari 5</strong>{" "}
+          Terkumpul:{" "}
+          <strong className="text-blue-600 font-black">
+            {achievedCount} dari {badges.length}
+          </strong>{" "}
           Lencana
         </span>
       </div>
@@ -88,32 +104,23 @@ export function AchievementBadges() {
             key={b.id}
             className={`flex flex-col items-center text-center p-4 rounded-2xl transition-transform hover:scale-105 cursor-pointer ${b.badgeBg}`}
           >
-            <div className="relative w-18 h-18 rounded-full bg-white flex items-center justify-center shadow-md text-3xl mb-2.5">
-              {b.icon}
-              {b.progressTag && (
-                <span className="absolute bottom-0 right-0 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold shadow-sm">
-                  {b.progressTag}
-                </span>
-              )}
+            <div className="relative w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-md text-3xl mb-2.5">
+              {b.achieved ? b.icon : "🔒"}
             </div>
 
-            <span className="font-heading text-sm font-black text-slate-900">
+            <span className="font-heading text-xs sm:text-sm font-black text-slate-900">
               {b.name}
             </span>
 
             <span
               className={`font-heading text-[11px] font-bold mt-0.5 ${
-                b.status === "achieved"
-                  ? "text-emerald-700"
-                  : b.status === "in_progress"
-                  ? "text-blue-600"
-                  : "text-slate-400"
+                b.achieved ? "text-emerald-700" : "text-slate-400"
               }`}
             >
               {b.statusText}
             </span>
 
-            <span className="text-[11px] font-medium text-slate-500 mt-1">
+            <span className="text-[11px] font-semibold text-slate-500 mt-1">
               {b.description}
             </span>
           </div>
@@ -128,10 +135,10 @@ export function AchievementBadges() {
           </div>
           <div>
             <h3 className="font-heading text-base sm:text-lg font-black text-slate-900">
-              Yuk, selesaikan 1 kuis lagi untuk membuka lencana baru!
+              Selesaikan tantangan koding untuk membuka lencana baru!
             </h3>
             <p className="text-slate-600 text-xs sm:text-sm font-medium">
-              Lencana &quot;Kilat Juara&quot; akan otomatis ditambahkan ke petimu.
+              Semua pencapaian dan skor kodingmu tersimpan otomatis di akunmu.
             </p>
           </div>
         </div>

@@ -175,7 +175,7 @@ export function DashboardNavbar({
                     </div>
                   </div>
 
-                  {/* Profile Page Link (Placeholder) */}
+                  {/* Profile Page Link */}
                   <Link
                     href="/profile"
                     onClick={() => setDropdownOpen(false)}
@@ -185,9 +185,6 @@ export function DashboardNavbar({
                       <User className="w-4 h-4 text-blue-500" />
                       <span>Profil Saya</span>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
-                      Placeholder
-                    </span>
                   </Link>
 
                   <div className="h-px bg-slate-100 my-0.5" />
@@ -294,9 +291,6 @@ export function DashboardNavbar({
                     <User className="w-4 h-4 text-blue-500" />
                     <span>Profil Saya</span>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">
-                    Placeholder
-                  </span>
                 </Link>
                 <button
                   type="button"
