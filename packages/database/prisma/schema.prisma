@@ -8,14 +8,21 @@ datasource db {
 }
 
 model Student {
-  id        String           @id @default(cuid())
-  name      String
-  email     String           @unique
-  grade     Int
-  password  String
-  progress  GameProgress[]
-  sessions  StudentSession[]
-  createdAt DateTime         @default(now())
+  id               String           @id @default(cuid())
+  name             String
+  email            String           @unique
+  grade            Int
+  password         String
+  schoolName       String?
+  hasCodingExp     Boolean          @default(false)
+  codingExpLevel   String?
+  favoriteInterest String?
+  learningGoal     String?
+  isOnboarded      Boolean          @default(false)
+  progress         GameProgress[]
+  sessions         StudentSession[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt @default(now())
 }
 
 model StudentSession {
