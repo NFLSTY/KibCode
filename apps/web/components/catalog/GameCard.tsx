@@ -12,6 +12,11 @@ import {
   Lock,
   Clock,
   PieChart,
+  Code2,
+  Repeat,
+  GitBranch,
+  Bug,
+  Box,
 } from "lucide-react";
 import type { CatalogGameItem } from "@/lib/constants/catalog-games";
 
@@ -20,12 +25,67 @@ interface GameCardProps {
 }
 
 export function GameCard({ game }: GameCardProps) {
-  // Category styling presets
+  // Category styling presets for coding tracks
   const getCategoryTheme = () => {
     switch (game.category) {
+      case "logic":
+        return {
+          name: "Logika Urutan",
+          icon: Code2,
+          bannerBg: "bg-blue-600",
+          tagBg: "bg-blue-700 text-white",
+          btnColor:
+            "bg-blue-600 hover:bg-blue-700 text-white shadow-[0_4px_0_#1D4ED8]",
+          progressBar: "bg-blue-600",
+          cardBorder: "border-blue-100 hover:border-blue-300",
+        };
+      case "loops":
+        return {
+          name: "Perulangan (Loop)",
+          icon: Repeat,
+          bannerBg: "bg-amber-500",
+          tagBg: "bg-amber-600 text-amber-950 font-black",
+          btnColor:
+            "bg-amber-400 hover:bg-amber-500 text-amber-950 shadow-[0_4px_0_#D97706]",
+          progressBar: "bg-amber-500",
+          cardBorder: "border-amber-100 hover:border-amber-300",
+        };
+      case "conditionals":
+        return {
+          name: "Jika-Maka (If-Else)",
+          icon: GitBranch,
+          bannerBg: "bg-purple-600",
+          tagBg: "bg-purple-700 text-white",
+          btnColor:
+            "bg-purple-600 hover:bg-purple-700 text-white shadow-[0_4px_0_#6B21A8]",
+          progressBar: "bg-purple-600",
+          cardBorder: "border-purple-100 hover:border-purple-300",
+        };
+      case "debugging":
+        return {
+          name: "Pemburu Bug",
+          icon: Bug,
+          bannerBg: "bg-rose-500",
+          tagBg: "bg-rose-600 text-white",
+          btnColor:
+            "bg-rose-500 hover:bg-rose-600 text-white shadow-[0_4px_0_#BE123C]",
+          progressBar: "bg-rose-500",
+          cardBorder: "border-rose-100 hover:border-rose-300",
+        };
+      case "algorithms":
+        return {
+          name: "Variabel & Data",
+          icon: Box,
+          bannerBg: "bg-emerald-600",
+          tagBg: "bg-emerald-700 text-white",
+          btnColor:
+            "bg-emerald-600 hover:bg-emerald-700 text-white shadow-[0_4px_0_#047857]",
+          progressBar: "bg-emerald-600",
+          cardBorder: "border-emerald-100 hover:border-emerald-300",
+        };
       case "math":
         return {
-          name: "Matematika",
+          name: "Logika Hitung",
           icon: Calculator,
           bannerBg: "bg-blue-500",
           tagBg: "bg-blue-600 text-white",
@@ -34,37 +94,15 @@ export function GameCard({ game }: GameCardProps) {
           progressBar: "bg-blue-500",
           cardBorder: "border-blue-100 hover:border-blue-300",
         };
-      case "reading":
-        return {
-          name: "Membaca",
-          icon: BookOpen,
-          bannerBg: "bg-amber-400",
-          tagBg: "bg-amber-500 text-amber-950",
-          btnColor:
-            "bg-amber-400 hover:bg-amber-500 text-amber-950 shadow-[0_4px_0_#D97706]",
-          progressBar: "bg-amber-400",
-          cardBorder: "border-amber-100 hover:border-amber-300",
-        };
-      case "spelling":
-        return {
-          name: "Mengeja",
-          icon: SpellCheck,
-          bannerBg: "bg-rose-500",
-          tagBg: "bg-rose-600 text-white",
-          btnColor:
-            "bg-rose-500 hover:bg-rose-600 text-white shadow-[0_4px_0_#BE123C]",
-          progressBar: "bg-rose-500",
-          cardBorder: "border-rose-100 hover:border-rose-300",
-        };
       default:
         return {
-          name: "Umum",
-          icon: Calculator,
-          bannerBg: "bg-slate-500",
-          tagBg: "bg-slate-600 text-white",
-          btnColor: "bg-blue-500 text-white",
-          progressBar: "bg-blue-500",
-          cardBorder: "border-slate-200",
+          name: "Modul Koding",
+          icon: Code2,
+          bannerBg: "bg-indigo-600",
+          tagBg: "bg-indigo-700 text-white",
+          btnColor: "bg-blue-600 text-white shadow-[0_4px_0_#1D4ED8]",
+          progressBar: "bg-blue-600",
+          cardBorder: "border-slate-200 hover:border-blue-300",
         };
     }
   };

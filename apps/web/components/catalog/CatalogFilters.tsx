@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { LayoutGrid, ArrowDownUp, ShieldCheck } from "lucide-react";
+import { LayoutGrid, ArrowDownUp } from "lucide-react";
 import type { GameCategory } from "@kibcode/types";
 
 export type FilterCategory = "all" | GameCategory;
@@ -10,12 +10,7 @@ export type SortOption = "popular" | "stars" | "difficulty-asc" | "difficulty-de
 interface CatalogFiltersProps {
   currentCategory: FilterCategory;
   onSelectCategory: (category: FilterCategory) => void;
-  counts: {
-    all: number;
-    math: number;
-    spelling: number;
-    reading: number;
-  };
+  counts: Record<string, number>;
   currentSort: SortOption;
   onSelectSort: (sort: SortOption) => void;
   grade?: number;
@@ -27,7 +22,6 @@ export function CatalogFilters({
   counts,
   currentSort,
   onSelectSort,
-  grade = 3,
 }: CatalogFiltersProps) {
   const categories: Array<{
     id: FilterCategory;
@@ -37,27 +31,39 @@ export function CatalogFilters({
   }> = [
     {
       id: "all",
-      label: "Semua",
+      label: "Semua Koding",
       icon: <LayoutGrid className="w-5 h-5" />,
-      count: counts.all,
+      count: counts.all || 0,
     },
     {
-      id: "math",
-      label: "Matematika",
-      icon: <span className="text-lg">🔢</span>,
-      count: counts.math,
+      id: "logic",
+      label: "Logika Urutan",
+      icon: <span className="text-lg">🧩</span>,
+      count: counts.logic || 0,
     },
     {
-      id: "spelling",
-      label: "Mengeja",
-      icon: <span className="text-lg">✏️</span>,
-      count: counts.spelling,
+      id: "loops",
+      label: "Perulangan (Loop)",
+      icon: <span className="text-lg">🔄</span>,
+      count: counts.loops || 0,
     },
     {
-      id: "reading",
-      label: "Membaca",
-      icon: <span className="text-lg">📖</span>,
-      count: counts.reading,
+      id: "conditionals",
+      label: "Jika-Maka (If-Else)",
+      icon: <span className="text-lg">⚡</span>,
+      count: counts.conditionals || 0,
+    },
+    {
+      id: "debugging",
+      label: "Pemburu Bug",
+      icon: <span className="text-lg">🐛</span>,
+      count: counts.debugging || 0,
+    },
+    {
+      id: "algorithms",
+      label: "Variabel & Data",
+      icon: <span className="text-lg">📦</span>,
+      count: counts.algorithms || 0,
     },
   ];
 
@@ -113,14 +119,6 @@ export function CatalogFilters({
             <option value="difficulty-asc">Level Terendah</option>
             <option value="difficulty-desc">Level Tertinggi</option>
           </select>
-        </div>
-
-        {/* Grade Indicator */}
-        <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amber-100 text-amber-950 border border-amber-300 shadow-[0_2px_0_#F59E0B] font-heading text-xs sm:text-sm font-bold min-h-[48px]">
-          <ShieldCheck className="w-4 h-4 text-amber-700" />
-          <span>
-            Level: <strong>Kelas {grade} SD</strong>
-          </span>
         </div>
       </div>
     </section>

@@ -30,12 +30,12 @@ export default function GameArenaPage({ params }: GameArenaProps) {
 
   // Find game info or use default
   const defaultGame = DEFAULT_CATALOG_GAMES.find((g) => g.id === gameId);
-  const [gameTitle, setGameTitle] = useState(defaultGame ? defaultGame.title : "Petualangan Pintar");
-  const [category, setCategory] = useState<GameCategory>(defaultGame ? defaultGame.category : "math");
+  const [gameTitle, setGameTitle] = useState(defaultGame ? defaultGame.title : "Petualangan Koding Kibo");
+  const [category, setCategory] = useState<GameCategory>(defaultGame ? defaultGame.category : "logic");
 
   // Questions
   const [questions, setQuestions] = useState<QuizQuestion[]>(() =>
-    getQuestionsForGame(gameId, defaultGame?.category || "math")
+    getQuestionsForGame(gameId, defaultGame?.category || "logic")
   );
 
   // Quiz state
@@ -49,7 +49,7 @@ export default function GameArenaPage({ params }: GameArenaProps) {
   const [startTime] = useState<number>(Date.now());
   const [durationSeconds, setDurationSeconds] = useState(0);
 
-  // Fetch API game details if available
+  // Fetch API game details and questions
   useEffect(() => {
     let isMounted = true;
     async function fetchGame() {
@@ -58,7 +58,11 @@ export default function GameArenaPage({ params }: GameArenaProps) {
         if (isMounted && res.game) {
           setGameTitle(res.game.title);
           setCategory(res.game.category);
-          setQuestions(getQuestionsForGame(gameId, res.game.category));
+          if (res.game.questions && res.game.questions.length > 0) {
+            setQuestions(res.game.questions as QuizQuestion[]);
+          } else {
+            setQuestions(getQuestionsForGame(gameId, res.game.category));
+          }
         }
       } catch (err) {
         // Fallback already provided
@@ -161,7 +165,7 @@ export default function GameArenaPage({ params }: GameArenaProps) {
           {/* Question Area Header with Kibo Mascot */}
           <div className="relative flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
             <KiboMascot mood={mascotMood} />
-            <QuestionBoard question={currentQuestion} />
+            <QuestionBoard question={currentQuestion} grade={student?.grade || 3} />
           </div>
 
           {/* Answer Choices */}

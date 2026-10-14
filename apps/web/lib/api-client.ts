@@ -121,6 +121,28 @@ export const api = {
       return fetcher<{ games: GameDTO[] }>(`/api/games${query}`);
     },
     getById: (id: string) => fetcher<{ game: GameDTO }>(`/api/games/${id}`),
+    generate: (data: { topic: string; category?: GameCategory; grade?: number; difficulty?: number }) =>
+      fetcher<{ game: GameDTO }>("/api/games/generate", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    getHint: (data: { question: string; storyPrompt?: string; codeSnippet?: string; grade?: number }) =>
+      fetcher<{ hint: string }>("/api/games/hint", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    getReview: (data: {
+      gameTitle: string;
+      score: number;
+      correctAnswers: number;
+      totalQuestions: number;
+      durationSeconds: number;
+      grade?: number;
+    }) =>
+      fetcher<{ message: string; tip: string }>("/api/games/review", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
   },
   progress: {
     save: (data: SaveProgressDTO) =>
