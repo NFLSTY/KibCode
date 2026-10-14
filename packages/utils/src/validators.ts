@@ -7,6 +7,15 @@ export const registerStudentSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+export const updateOnboardingSchema = z.object({
+  grade: z.number().int().min(1, "Kelas harus antara 1 dan 6").max(6, "Kelas harus antara 1 dan 6"),
+  schoolName: z.string().min(2, "Nama sekolah minimal 2 karakter").max(100, "Nama sekolah maksimal 100 karakter"),
+  hasCodingExp: z.boolean(),
+  codingExpLevel: z.string().nullable().optional(),
+  favoriteInterest: z.string().nullable().optional(),
+  learningGoal: z.string().nullable().optional(),
+});
+
 export const loginStudentSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
