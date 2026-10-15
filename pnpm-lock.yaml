@@ -20,6 +20,12 @@ importers:
 
   apps/api:
     dependencies:
+      '@fastify/cors':
+        specifier: ^11.3.0
+        version: 11.3.0
+      '@fastify/jwt':
+        specifier: ^10.2.2
+        version: 10.2.2
       '@kibcode/database':
         specifier: workspace:*
         version: link:../../packages/database
@@ -29,12 +35,6 @@ importers:
       '@kibcode/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@fastify/cors':
-        specifier: ^11.3.0
-        version: 11.3.0
-      '@fastify/jwt':
-        specifier: ^10.2.2
-        version: 10.2.2
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -3636,6 +3636,7 @@ packages:
   typescript@7.0.2:
     resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
     engines: {node: '>=16.20.0'}
+    hasBin: true
 
   unbox-primitive@1.1.0:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
