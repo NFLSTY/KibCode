@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_APP_URL || "https://kibcode.my.id"
   ),
   title: {
-    default: "KibCode — Petualangan Coding & AI untuk Anak SD",
+    default: "KibCode | Petualangan Coding & AI untuk Anak SD",
     template: "%s | KibCode",
   },
   description:
@@ -48,13 +48,13 @@ export const metadata: Metadata = {
     locale: "id_ID",
     url: "https://kibcode.my.id",
     siteName: "KibCode",
-    title: "KibCode — Petualangan Coding & AI untuk Anak SD",
+    title: "KibCode | Petualangan Coding & AI untuk Anak SD",
     description:
       "Platform belajar coding dan AI interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "KibCode — Petualangan Coding & AI untuk Anak SD",
+    title: "KibCode | Petualangan Coding & AI untuk Anak SD",
     description:
       "Platform belajar coding dan AI interaktif dan ramah anak untuk siswa Sekolah Dasar di Indonesia.",
   },
