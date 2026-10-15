@@ -55,8 +55,8 @@ export function StepCongratulationModal({
   useEffect(() => {
     if (typeof window === "undefined" || !isOpen) return;
 
-    const docEl = document.documentElement;
-    const body = document.body;
+    const docEl = window.document.documentElement;
+    const body = window.document.body;
     const scrollY = window.scrollY;
 
     const originalHtmlOverflow = docEl.style.overflow;

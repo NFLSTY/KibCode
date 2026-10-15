@@ -45,7 +45,6 @@ export function DashboardGreeting({
               <h1 className="font-heading text-2xl sm:text-3xl font-black text-slate-900 tracking-tight truncate">
                 Halo, {name}!
               </h1>
-              <span className="text-2xl animate-bounce shrink-0">🌟</span>
             </div>
             <p className="text-slate-600 text-xs sm:text-sm font-semibold mt-1 leading-relaxed">
               Selamat datang di petualangan kodingmu bersama Kibo! Siap selesaikan tantangan hari ini? 🚀

@@ -71,14 +71,14 @@ export function DashboardNavbar({
       isActive: pathname === "/dashboard",
     },
     {
-      label: "Game Edukasi",
-      href: "/games",
-      isActive: pathname.startsWith("/games"),
-    },
-    {
       label: "Modul Belajar",
       href: "/kurikulum",
       isActive: pathname.startsWith("/kurikulum"),
+    },
+    {
+      label: "Game Edukasi",
+      href: "/games",
+      isActive: pathname.startsWith("/games"),
     },
     {
       label: "Arena Koding",

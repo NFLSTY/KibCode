@@ -432,7 +432,7 @@ export default function CodingArenaPage() {
               <span>Studio Seni Koding — Gambar dengan Perintah!</span>
             </div>
             <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
-              Arena Koding Piksel 🎨
+              Arena Koding Piksel
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-lg">
               {challenge.objective}

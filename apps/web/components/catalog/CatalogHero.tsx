@@ -32,7 +32,6 @@ export function CatalogHero({
 
           <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight flex items-center justify-center md:justify-start gap-3 flex-wrap">
             Game Edukasi Koding
-            <span className="inline-block animate-bounce">🎮</span>
           </h1>
 
           <p className="text-blue-100 text-sm sm:text-base leading-relaxed font-medium">
