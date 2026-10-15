@@ -42,8 +42,8 @@ export function FeedbackBanner({
         <div className="flex flex-col">
           <span className="font-heading text-base sm:text-lg font-black text-slate-900 leading-tight">
             {isCorrect
-              ? "Luar biasa, kamu pintar sekali! 🎉"
-              : "Tetap semangat, kamu sudah berusaha! 💪"}
+              ? "Luar biasa, jawabanmu benar!"
+              : "Tetap semangat, coba perhatikan tips berikut!"}
           </span>
           <span
             className={`font-heading text-xs sm:text-sm font-bold mt-0.5 ${
@@ -51,7 +51,7 @@ export function FeedbackBanner({
             }`}
           >
             {isCorrect
-              ? "+50 Bintang & streak bertambah! 🌟"
+              ? "+50 Bintang & streak bertambah!"
               : explanation || "Ayo pelajari konsepnya dan coba lagi di soal berikutnya!"}
           </span>
         </div>
@@ -64,7 +64,7 @@ export function FeedbackBanner({
         className="w-full sm:w-auto min-h-[52px] inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-amber-950 px-7 py-3 rounded-full font-heading text-base font-black shadow-[0_5px_0_#D97706] active:translate-y-1 active:shadow-[0_2px_0_#D97706] transition-all cursor-pointer"
       >
         <span>
-          {isLastQuestion ? "Lihat Hasil Petualangan 🏆" : "Lanjut ke Soal Berikutnya"}
+          {isLastQuestion ? "Lihat Hasil Petualangan" : "Lanjut ke Soal Berikutnya"}
         </span>
         <ArrowRight className="w-5 h-5" />
       </button>

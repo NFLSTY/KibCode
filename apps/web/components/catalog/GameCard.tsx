@@ -17,6 +17,9 @@ import {
   GitBranch,
   Bug,
   Box,
+  RotateCcw,
+  CheckCircle2,
+  Gamepad2,
 } from "lucide-react";
 import type { CatalogGameItem } from "@/lib/constants/catalog-games";
 
@@ -93,6 +96,39 @@ export function GameCard({ game }: GameCardProps) {
             "bg-emerald-600 hover:bg-emerald-700 text-white shadow-[0_4px_0_#047857]",
           progressBar: "bg-emerald-600",
           cardBorder: "border-emerald-100 hover:border-emerald-300",
+        };
+      case "functions" as any:
+        return {
+          name: "Fungsi & Blok",
+          icon: Zap,
+          bannerBg: "bg-indigo-600",
+          tagBg: "bg-indigo-700 text-white",
+          btnColor:
+            "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_4px_0_#4338CA]",
+          progressBar: "bg-indigo-600",
+          cardBorder: "border-indigo-100 hover:border-indigo-300",
+        };
+      case "events" as any:
+        return {
+          name: "Event & Sensor",
+          icon: Play,
+          bannerBg: "bg-orange-500",
+          tagBg: "bg-orange-600 text-white",
+          btnColor:
+            "bg-orange-500 hover:bg-orange-600 text-white shadow-[0_4px_0_#C2410C]",
+          progressBar: "bg-orange-500",
+          cardBorder: "border-orange-100 hover:border-orange-300",
+        };
+      case "game_design" as any:
+        return {
+          name: "Desain Game",
+          icon: Gamepad2,
+          bannerBg: "bg-violet-600",
+          tagBg: "bg-violet-700 text-white",
+          btnColor:
+            "bg-violet-600 hover:bg-violet-700 text-white shadow-[0_4px_0_#6D28D9]",
+          progressBar: "bg-violet-600",
+          cardBorder: "border-violet-100 hover:border-violet-300",
         };
       case "math":
         return {
@@ -195,7 +231,7 @@ export function GameCard({ game }: GameCardProps) {
           </h3>
           <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold shrink-0 shadow-sm flex items-center gap-1 border border-amber-300">
             <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-            <span>+{game.starsReward} ⭐</span>
+            <span>+{game.starsReward} Bintang</span>
           </span>
         </div>
 
@@ -232,23 +268,46 @@ export function GameCard({ game }: GameCardProps) {
             {/* Progress Bar */}
             <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden p-0.5">
               <div
-                className={`h-full rounded-full transition-all duration-700 ${theme.progressBar}`}
+                className={`h-full rounded-full transition-all duration-700 ${
+                  game.progressPercent === 100 ? "bg-emerald-500" : theme.progressBar
+                }`}
                 style={{ width: `${game.progressPercent}%` }}
               />
             </div>
 
             <div className="flex items-center justify-between text-xs font-bold text-slate-500">
-              <span>Selesai {game.progressPercent}%</span>
+              <span className="flex items-center gap-1">
+                {game.progressPercent === 100 && (
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                )}
+                <span>Selesai {game.progressPercent}%</span>
+              </span>
               <span>Rekor: {game.recordScore} Poin</span>
             </div>
 
             {/* Play Button */}
             <Link
               href={`/games/${game.id}`}
-              className={`w-full h-12 rounded-full font-heading text-base font-bold active:translate-y-1 transition-all flex items-center justify-center gap-2 min-h-[48px] ${theme.btnColor}`}
+              className={`w-full h-12 rounded-full font-heading text-base font-bold active:translate-y-1 transition-all flex items-center justify-center gap-2 min-h-[48px] ${
+                game.progressPercent === 100
+                  ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-[0_4px_0_#047857]"
+                  : game.progressPercent > 0
+                  ? "bg-amber-400 hover:bg-amber-500 text-amber-950 shadow-[0_4px_0_#D97706]"
+                  : theme.btnColor
+              }`}
             >
-              <span>Main Sekarang</span>
-              <Play className="w-4 h-4 fill-current" />
+              <span>
+                {game.progressPercent === 100
+                  ? "Main Lagi"
+                  : game.progressPercent > 0
+                  ? "Lanjut Main"
+                  : "Main Sekarang"}
+              </span>
+              {game.progressPercent === 100 ? (
+                <RotateCcw className="w-4 h-4" />
+              ) : (
+                <Play className="w-4 h-4 fill-current" />
+              )}
             </Link>
           </>
         )}

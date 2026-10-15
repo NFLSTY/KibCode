@@ -43,13 +43,13 @@ export function QuizHeader({
         {/* Streak Chip */}
         <div className="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 px-3.5 sm:px-4 py-2 rounded-full shadow-2xs font-heading text-xs sm:text-sm font-black">
           <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
-          <span>Streak {streak}x 🔥</span>
+          <span>Streak {streak}x</span>
         </div>
 
         {/* Stars Counter */}
         <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 border border-amber-200 px-3.5 sm:px-4 py-2 rounded-full shadow-2xs font-heading text-xs sm:text-sm font-black">
           <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-          <span>{starsCollected} Bintang ⭐</span>
+          <span>{starsCollected} Bintang</span>
         </div>
       </div>
     </div>

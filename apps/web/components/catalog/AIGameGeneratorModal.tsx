@@ -13,11 +13,11 @@ interface AIGameGeneratorModalProps {
 }
 
 const QUICK_TOPICS = [
-  { label: "🚀 Roket Antariksa", topic: "Misi Roket Menuju Bintang", category: "loops" as GameCategory },
-  { label: "🤖 Robot Pembersih", topic: "Robot Kibo Membersihkan Kamar", category: "logic" as GameCategory },
-  { label: "🚦 Lampu Kota Pintar", topic: "Sensor Lampu Lalu Lintas Pintar", category: "conditionals" as GameCategory },
-  { label: "🐛 Detektif Bug", topic: "Menemukan Error Kode Mesin Game", category: "debugging" as GameCategory },
-  { label: "💎 Peti Harta Karun", topic: "Kotak Variabel Skor dan Koin", category: "algorithms" as GameCategory },
+  { label: "Roket Antariksa", topic: "Misi Roket Menuju Bintang", category: "loops" as GameCategory },
+  { label: "Robot Pembersih", topic: "Robot Kibo Membersihkan Kamar", category: "logic" as GameCategory },
+  { label: "Lampu Kota Pintar", topic: "Sensor Lampu Lalu Lintas Pintar", category: "conditionals" as GameCategory },
+  { label: "Detektif Bug", topic: "Menemukan Error Kode Mesin Game", category: "debugging" as GameCategory },
+  { label: "Peti Harta Karun", topic: "Kotak Variabel Skor dan Koin", category: "algorithms" as GameCategory },
 ];
 
 export function AIGameGeneratorModal({
@@ -103,7 +103,7 @@ export function AIGameGeneratorModal({
           {/* Quick Ideas */}
           <div>
             <label className="block text-xs font-bold text-slate-600 mb-1.5">
-              💡 Pilih Ide Cepat atau Tulis Topikmu Sendiri:
+              Pilih Ide Cepat atau Tulis Topikmu Sendiri:
             </label>
             <div className="flex flex-wrap gap-1.5">
               {QUICK_TOPICS.map((item) => (
@@ -171,9 +171,9 @@ export function AIGameGeneratorModal({
                 className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold text-xs text-slate-800 cursor-pointer"
                 disabled={isGenerating}
               >
-                <option value={1}>⭐ Level 1: Pemula (Dasar)</option>
-                <option value={2}>⭐⭐ Level 2: Menengah</option>
-                <option value={3}>⭐⭐⭐ Level 3: Tantangan</option>
+                <option value={1}>Level 1: Pemula (Mudah)</option>
+                <option value={2}>Level 2: Menengah (Sedang)</option>
+                <option value={3}>Level 3: Tingkat Tantangan</option>
               </select>
             </div>
           </div>

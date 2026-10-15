@@ -1,11 +1,31 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { LayoutGrid, ArrowDownUp, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  LayoutGrid,
+  ArrowDownUp,
+  ChevronLeft,
+  ChevronRight,
+  Code2,
+  Repeat,
+  GitBranch,
+  Box,
+  Bug,
+  PieChart,
+  Zap,
+  Play,
+  Gamepad2,
+} from "lucide-react";
 import type { GameCategory } from "@kibcode/types";
 
 export type FilterCategory = "all" | GameCategory;
-export type SortOption = "popular" | "stars" | "difficulty-asc" | "difficulty-desc";
+export type SortOption =
+  | "popular"
+  | "stars"
+  | "difficulty-asc"
+  | "difficulty-desc"
+  | "uncompleted"
+  | "completed";
 
 interface CatalogFiltersProps {
   currentCategory: FilterCategory;
@@ -35,47 +55,74 @@ export function CatalogFilters({
   }> = [
     {
       id: "all",
-      label: "Semua Koding",
-      icon: <LayoutGrid className="w-5 h-5" />,
+      label: "Semua Game",
+      icon: <LayoutGrid className="w-5 h-5 text-blue-600" />,
       count: counts.all || 0,
     },
     {
       id: "logic",
       label: "Logika Urutan",
-      icon: <span className="text-lg">🧩</span>,
+      icon: <Code2 className="w-5 h-5 text-blue-600" />,
       count: counts.logic || 0,
     },
     {
       id: "loops",
       label: "Perulangan (Loop)",
-      icon: <span className="text-lg">🔄</span>,
+      icon: <Repeat className="w-5 h-5 text-amber-500" />,
       count: counts.loops || 0,
     },
     {
       id: "conditionals",
       label: "Jika-Maka (If-Else)",
-      icon: <span className="text-lg">⚡</span>,
+      icon: <GitBranch className="w-5 h-5 text-purple-600" />,
       count: counts.conditionals || 0,
     },
     {
       id: "variables",
       label: "Variabel & Data",
-      icon: <span className="text-lg">📦</span>,
+      icon: <Box className="w-5 h-5 text-teal-600" />,
       count: counts.variables || 0,
     },
     {
       id: "debugging",
       label: "Pemburu Bug",
-      icon: <span className="text-lg">🐛</span>,
+      icon: <Bug className="w-5 h-5 text-rose-500" />,
       count: counts.debugging || 0,
     },
     {
       id: "algorithms",
       label: "Algoritma Solusi",
-      icon: <span className="text-lg">🧭</span>,
+      icon: <PieChart className="w-5 h-5 text-emerald-600" />,
       count: counts.algorithms || 0,
     },
   ];
+
+  if ((counts.functions || 0) > 0) {
+    categories.push({
+      id: "functions" as FilterCategory,
+      label: "Fungsi & Blok",
+      icon: <Zap className="w-5 h-5 text-indigo-600" />,
+      count: counts.functions || 0,
+    });
+  }
+
+  if ((counts.events || 0) > 0) {
+    categories.push({
+      id: "events" as FilterCategory,
+      label: "Event & Sensor",
+      icon: <Play className="w-5 h-5 text-orange-500" />,
+      count: counts.events || 0,
+    });
+  }
+
+  if ((counts.game_design || 0) > 0) {
+    categories.push({
+      id: "game_design" as FilterCategory,
+      label: "Desain Game",
+      icon: <Gamepad2 className="w-5 h-5 text-violet-600" />,
+      count: counts.game_design || 0,
+    });
+  }
 
   const checkScroll = useCallback(() => {
     if (!scrollRef.current) return;
@@ -192,10 +239,12 @@ export function CatalogFilters({
             onChange={(e) => onSelectSort(e.target.value as SortOption)}
             className="bg-transparent font-heading text-xs sm:text-sm font-bold text-slate-800 focus:outline-none cursor-pointer"
           >
-            <option value="popular">Paling Populer 🔥</option>
-            <option value="stars">Bintang Tertinggi ⭐</option>
-            <option value="difficulty-asc">Level Terendah</option>
-            <option value="difficulty-desc">Level Tertinggi</option>
+            <option value="popular">Rekomendasi Utama</option>
+            <option value="stars">Bintang Terbanyak</option>
+            <option value="difficulty-asc">Level Termudah</option>
+            <option value="difficulty-desc">Level Tersulit</option>
+            <option value="uncompleted">Belum Selesai</option>
+            <option value="completed">Sudah Selesai</option>
           </select>
         </div>
       </div>

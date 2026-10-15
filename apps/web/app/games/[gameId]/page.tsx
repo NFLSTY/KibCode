@@ -14,7 +14,7 @@ import type { QuizQuestion } from "@/lib/constants/quiz-questions";
 import { api } from "@/lib/api-client";
 import { useAuth } from "@/lib/hooks/useAuth";
 import type { GameCategory } from "@kibcode/types";
-import { HeartHandshake, Smile, Loader2, ArrowLeft } from "lucide-react";
+import { HeartHandshake, Smile, Loader2, ArrowLeft, Gamepad2 } from "lucide-react";
 import Link from "next/link";
 
 interface GameArenaProps {
@@ -43,6 +43,14 @@ export default function GameArenaPage({ params }: GameArenaProps) {
   const [startTime] = useState<number>(Date.now());
   const [durationSeconds, setDurationSeconds] = useState(0);
 
+  const sessionKey = student?.id
+    ? `kibcode_game_session_${student.id}_${gameId}`
+    : `kibcode_game_session_guest_${gameId}`;
+
+  const completionKey = student?.id
+    ? `kibcode_game_completed_${student.id}_${gameId}`
+    : `kibcode_game_completed_guest_${gameId}`;
+
   // Fetch API game details and questions
   useEffect(() => {
     let isMounted = true;
@@ -57,7 +65,28 @@ export default function GameArenaPage({ params }: GameArenaProps) {
           setGameTitle(sanitizedTitle);
           setCategory(res.game.category);
           if (res.game.questions && res.game.questions.length > 0) {
-            setQuestions(res.game.questions as QuizQuestion[]);
+            const qs = res.game.questions as QuizQuestion[];
+            setQuestions(qs);
+
+            // Restore in-progress session if student stopped in the middle
+            try {
+              const saved = localStorage.getItem(sessionKey);
+              if (saved) {
+                const parsed = JSON.parse(saved);
+                if (
+                  typeof parsed.currentIndex === "number" &&
+                  parsed.currentIndex >= 0 &&
+                  parsed.currentIndex < qs.length
+                ) {
+                  setCurrentIndex(parsed.currentIndex);
+                  setStreak(parsed.streak || 0);
+                  setStarsCollected(parsed.starsCollected || 0);
+                  setCorrectCount(parsed.correctCount || 0);
+                }
+              }
+            } catch {
+              // Ignore corrupt storage
+            }
           }
         }
       } catch (err) {
@@ -72,7 +101,7 @@ export default function GameArenaPage({ params }: GameArenaProps) {
     return () => {
       isMounted = false;
     };
-  }, [gameId]);
+  }, [gameId, sessionKey]);
 
   if (isLoading) {
     return (
@@ -98,7 +127,7 @@ export default function GameArenaPage({ params }: GameArenaProps) {
       <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
         <DashboardNavbar />
         <main className="flex-1 w-full max-w-xl mx-auto px-4 sm:px-6 pt-36 pb-16 flex flex-col items-center text-center">
-          <span className="text-5xl mb-4">🎮</span>
+          <Gamepad2 className="w-14 h-14 text-blue-600 mb-4" />
           <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2">
             Game Edukasi Tidak Ditemukan
           </h2>
@@ -140,15 +169,61 @@ export default function GameArenaPage({ params }: GameArenaProps) {
       const elapsed = Math.max(1, Math.round((Date.now() - startTime) / 1000));
       setDurationSeconds(elapsed);
       setIsCompleted(true);
+
+      // Clean up in-progress session and record completion in local storage
+      try {
+        localStorage.removeItem(sessionKey);
+        const finalScore = Math.round(
+          ((correctCount + (isCurrentCorrect ? 1 : 0)) / questions.length) * 100
+        );
+        localStorage.setItem(
+          completionKey,
+          JSON.stringify({
+            score: finalScore,
+            starsCollected: starsCollected + (isCurrentCorrect ? 50 : 0),
+            completed: true,
+            completedAt: Date.now(),
+          })
+        );
+      } catch {
+        // Ignore localStorage error
+      }
     } else {
-      setCurrentIndex((prev) => prev + 1);
+      const nextIndex = currentIndex + 1;
+      const nextStreak = isCurrentCorrect ? streak + 1 : 0;
+      const nextStars = isCurrentCorrect ? starsCollected + 50 : starsCollected;
+      const nextCorrect = isCurrentCorrect ? correctCount + 1 : correctCount;
+
+      setCurrentIndex(nextIndex);
       setSelectedOptionId(null);
       setIsCurrentCorrect(null);
+
+      // Persist ongoing session so the student can resume from this question number
+      try {
+        localStorage.setItem(
+          sessionKey,
+          JSON.stringify({
+            currentIndex: nextIndex,
+            streak: nextStreak,
+            starsCollected: nextStars,
+            correctCount: nextCorrect,
+            totalQuestions: questions.length,
+            updatedAt: Date.now(),
+          })
+        );
+      } catch {
+        // Ignore localStorage error
+      }
     }
   };
 
   // Handle restarting quiz
   const handleRestart = () => {
+    try {
+      localStorage.removeItem(sessionKey);
+    } catch {
+      // Ignore
+    }
     setCurrentIndex(0);
     setSelectedOptionId(null);
     setIsCurrentCorrect(null);

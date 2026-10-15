@@ -35,6 +35,24 @@ export function QuizCompletedModal({
   useEffect(() => {
     let isMounted = true;
 
+    // Immediately record locally as fallback so card status updates instantly
+    try {
+      const completionKey = student?.id
+        ? `kibcode_game_completed_${student.id}_${gameId}`
+        : `kibcode_game_completed_guest_${gameId}`;
+      localStorage.setItem(
+        completionKey,
+        JSON.stringify({
+          score: scorePercentage,
+          starsCollected,
+          completed: true,
+          completedAt: Date.now(),
+        })
+      );
+    } catch {
+      // Ignore
+    }
+
     async function recordProgressAndReview() {
       // 1. Record progress if logged in
       if (student) {
@@ -78,16 +96,11 @@ export function QuizCompletedModal({
     return () => {
       isMounted = false;
     };
-  }, [student, gameId, scorePercentage, durationSeconds, gameTitle, correctAnswers, totalQuestions]);
+  }, [student, gameId, scorePercentage, durationSeconds, gameTitle, correctAnswers, totalQuestions, starsCollected]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border-4 border-amber-300 text-center relative overflow-hidden">
-        {/* Playful Floating Emojis */}
-        <div className="absolute top-4 left-6 text-3xl animate-bounce">🎈</div>
-        <div className="absolute top-6 right-6 text-3xl animate-pulse">✨</div>
-        <div className="absolute bottom-4 left-6 text-2xl opacity-40">🌟</div>
-
         {/* Big Golden Trophy Icon */}
         <div className="w-20 h-20 mx-auto rounded-3xl bg-amber-400 text-amber-950 flex items-center justify-center shadow-[0_6px_0_#D97706] mb-4">
           <Trophy className="w-12 h-12 fill-amber-950" />
@@ -95,7 +108,7 @@ export function QuizCompletedModal({
 
         {/* Title */}
         <h2 className="font-heading text-2xl sm:text-3xl font-black text-slate-900 mb-1">
-          Misi Selesai! 🎉
+          Misi Selesai!
         </h2>
         <p className="text-slate-600 text-xs sm:text-sm font-semibold mb-5">
           Hebat sekali! Kamu telah menyelesaikan permainan koding{" "}
@@ -144,11 +157,11 @@ export function QuizCompletedModal({
               <Bot className="w-4 h-4 text-amber-600" />
               <span>Catatan Belajar Kibo AI:</span>
             </div>
-            <p className="text-xs text-amber-950 font-semibold mb-0.5">
+            <p className="text-xs text-amber-950 font-semibold mb-1">
               {aiReview.message}
             </p>
             <p className="text-[11px] text-amber-800 font-medium">
-              💡 {aiReview.tip}
+              Tip Kibo: {aiReview.tip}
             </p>
           </div>
         )}

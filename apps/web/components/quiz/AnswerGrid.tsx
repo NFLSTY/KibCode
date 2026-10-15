@@ -87,8 +87,8 @@ export function AnswerGrid({
                     }`}
                   >
                     {opt.isCorrect
-                      ? "Hebat, Jawaban Tepat! ⭐"
-                      : "Hampir tepat! Coba pelajari ya 💛"}
+                      ? "Jawaban tepat!"
+                      : "Hampir tepat, coba pelajari ya"}
                   </span>
                 )}
               </div>

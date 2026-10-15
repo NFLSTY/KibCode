@@ -40,7 +40,7 @@ export function QuestionBoard({
       });
       setAiHint(res.hint);
     } catch {
-      setAiHint("💡 Coba perhatikan urutan instruksinya dari baris pertama ke baris berikutnya ya!");
+      setAiHint("Coba perhatikan urutan instruksinya dari baris pertama ke baris berikutnya ya!");
     } finally {
       setIsLoadingHint(false);
     }
@@ -126,7 +126,7 @@ export function QuestionBoard({
             ) : (
               <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
             )}
-            <span>Tanya Kibo AI 💡</span>
+            <span>Tanya Kibo AI</span>
           </button>
 
           {/* Scratchpad Button */}
@@ -136,7 +136,7 @@ export function QuestionBoard({
             className="inline-flex items-center gap-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3.5 py-1.5 rounded-full font-heading text-xs font-bold transition-colors cursor-pointer"
           >
             <Pencil className="w-3.5 h-3.5 text-amber-700" />
-            <span>Papan Coretan ✏️</span>
+            <span>Papan Coretan</span>
           </button>
         </div>
       </div>
