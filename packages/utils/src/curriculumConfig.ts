@@ -4,7 +4,10 @@ export type CurriculumCategory =
   | "conditionals"
   | "variables"
   | "debugging"
-  | "algorithms";
+  | "algorithms"
+  | "functions"
+  | "events"
+  | "game_design";
 
 export interface CodingTrackConfig {
   category: CurriculumCategory;
@@ -42,7 +45,7 @@ export interface StudentCurriculumProfile {
 
 /**
  * 50% Pedagogical Pillar: Core Coding Fundamentals for Elementary Kids (SD)
- * 6 balanced foundational arenas tailored for children
+ * 6 balanced foundational arenas tailored for children + advanced tracks
  */
 export const CODING_FUNDAMENTALS_MATRIX: Record<
   CurriculumCategory,
@@ -95,6 +98,30 @@ export const CODING_FUNDAMENTALS_MATRIX: Record<
     pedagogicalObjective:
       "Siswa memahami cara memecah tantangan besar menjadi langkah-langkah terstruktur dan efisien.",
     sampleCodePattern: "Langkah_1: Cari Kunci -> Langkah_2: Buka Gerbang -> Langkah_3: Raih Tropi Juara",
+  },
+  functions: {
+    category: "functions",
+    name: "Fungsi & Prosedur Mandiri",
+    fundamentalConcept: "Fungsi & Modularitas Kode (Functions & Procedures)",
+    pedagogicalObjective:
+      "Siswa memahami cara mengelompokkan sekumpulan instruksi menjadi satu nama fungsi mandiri agar dapat dipanggil berkali-kali tanpa menulis ulang.",
+    sampleCodePattern: "fungsi lompatTinggi() {\n  tekukKaki();\n  dorongKeAtas(50);\n}\n\nlompatTinggi();",
+  },
+  events: {
+    category: "events",
+    name: "Event & Sensor Interaktif",
+    fundamentalConcept: "Deteksi Aksi & Interaksi Pengguna (Event Handling)",
+    pedagogicalObjective:
+      "Siswa memahami bagaimana komputer menunggu dan merespons aksi nyata seperti tombol ditekan, layar disentuh, atau tabrakan rintangan.",
+    sampleCodePattern: "saatTombolDitekan(\"SPASI\", () => {\n  kiboMelompat();\n  tambahSkor(10);\n});",
+  },
+  game_design: {
+    category: "game_design",
+    name: "Arsitektur Game Mini",
+    fundamentalConcept: "Integrasi Game Loop & Logika Terpadu (Game Architecture)",
+    pedagogicalObjective:
+      "Siswa mempraktikkan penggabungan variabel skor, percabangan logika, dan perulangan loop menjadi satu game petualangan utuh.",
+    sampleCodePattern: "selamanya() {\n  gambarKarakter();\n  jika (sentuhBintang()) {\n    skor = skor + 10;\n  }\n}",
   },
 };
 
