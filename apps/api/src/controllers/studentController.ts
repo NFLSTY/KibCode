@@ -178,6 +178,18 @@ export class StudentController {
     return reply.send({ modules });
   }
 
+  static async advanceModule(request: FastifyRequest, reply: FastifyReply) {
+    const userPayload = request.user as { id: string } | undefined;
+    if (!userPayload?.id) {
+      return reply.status(401).send({ error: "Unauthorized", message: "User not authenticated" });
+    }
+
+    const curriculumService = new CurriculumService(request.server.prisma);
+    const result = await curriculumService.generateNextLevelModuleForStudent(userPayload.id);
+
+    return reply.send(result);
+  }
+
   static async askTutor(request: FastifyRequest, reply: FastifyReply) {
     const userPayload = request.user as { id: string } | undefined;
     if (!userPayload?.id) {

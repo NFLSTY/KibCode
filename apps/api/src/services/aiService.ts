@@ -5,6 +5,7 @@ import type {
   AskHintResponseDTO,
   ReviewGameResponseDTO,
 } from "@kibcode/types";
+import { getCategoryFallbackQuestions } from "./gameFallbackData.js";
 
 interface GeminiGenerationConfig {
   responseMimeType?: string;
@@ -164,40 +165,45 @@ Fokus pembelajaran HANYA tentang konsep CODING dasar:
 Bahasa: Bahasa Indonesia ramah anak SD.
 Output HARUS murni JSON yang valid sesuai skema yang diminta, tanpa markdown fences.`;
 
-    const prompt = `Buat 1 game edukasi koding baru bertema: "${topic}".
+    const prompt = `Rancang 1 game edukasi koding interaktif bertema: "${topic}".
 Untuk siswa SD Kelas: ${grade}, Tingkat Kesulitan: ${difficulty} (1=Mudah, 2=Sedang, 3=Tantangan).
-Kategori yang disarankan: "${requestedCategory}".
+Kategori koding: "${requestedCategory}".
 
 Skema JSON yang WAJIB dihasilkan:
 {
   "title": "${topic}",
-  "category": "logic" | "loops" | "conditionals" | "variables" | "debugging" | "algorithms",
+  "category": "${requestedCategory}",
   "difficulty": ${difficulty},
-  "description": "Deskripsi misi seru untuk anak (1-2 kalimat)",
+  "description": "Deskripsi petualangan game singkat yang seru untuk anak (1-2 kalimat)",
   "questions": [
     {
       "id": "q1",
-      "storyPrompt": "Cerita skenario singkat bergambar imajinasi anak SD",
-      "question": "Pertanyaan logika koding yang jelas",
-      "codeSnippet": "Contoh blok kode visual atau pseudocode sederhana (opsional tapi disarankan)",
+      "storyPrompt": "Cerita skenario tantangan game yang seru dan memotivasi anak",
+      "question": "Pertanyaan teka-teki logika koding yang jelas dan terarah",
+      "codeSnippet": "Blok visual kode atau pseudocode ramah anak",
       "options": [
         { "id": "A", "label": "A", "text": "Jawaban pilihan A", "isCorrect": false },
         { "id": "B", "label": "B", "text": "Jawaban pilihan B", "isCorrect": true },
         { "id": "C", "label": "C", "text": "Jawaban pilihan C", "isCorrect": false },
         { "id": "D", "label": "D", "text": "Jawaban pilihan D", "isCorrect": false }
       ],
-      "explanation": "Penjelasan ramah anak mengapa jawaban tersebut benar"
+      "explanation": "Penjelasan singkat ramah anak mengapa jawaban tersebut benar"
     }
   ]
 }
-Catatan Penting: Gunakan judul tema "${topic}" langsung sebagai "title". JANGAN tambahkan awalan "Tantangan Logika:".
-Buat tepat 4 soal kuis logika koding interaktif berkualitas tinggi yang mendidik dan menyenangkan!`;
+Catatan Penting:
+1. Judul tema "${topic}" langsung sebagai "title". JANGAN tambahkan awalan "Tantangan Logika:".
+2. Buat TEPAT 10 soal kuis tantangan koding interaktif (questions berjumlah 10 buah berturut-turut dari id q1 sampai q10).
+3. Soal 1-3: Pemahaman konsep dasar & observasi pola blok perintah
+4. Soal 4-7: Penelusuran alur eksekusi (tracing kode / deteksi rintangan / percabangan)
+5. Soal 8-10: Strategi pemecahan teka-teki logika koding terapan
+6. Karakter Kibo membimbing ramah dalam setiap skenario petualangan.`;
 
     try {
       const rawJson = await this.callGemini(prompt, systemInstruction, {
         responseMimeType: "application/json",
         temperature: 0.7,
-        maxOutputTokens: 3500,
+        maxOutputTokens: 6000,
       });
 
       let cleanJson = rawJson.trim();
@@ -240,351 +246,13 @@ Buat tepat 4 soal kuis logika koding interaktif berkualitas tinggi yang mendidik
   }
 
   /**
-   * Generates 4 category-tailored educational questions when an API or network cutoff occurs
+   * Generates 10 category-tailored educational questions when an API or network cutoff occurs
    */
   private getCategoryFallbackQuestions(
     category: GameCategory,
     topic: string
   ): QuizQuestionDTO[] {
-    const ts = Date.now();
-    switch (category) {
-      case "loops":
-        return [
-          {
-            id: `fb-loop-${ts}-1`,
-            storyPrompt: `Di arena ${topic}, Robot Kibo melihat 4 buah baterai energi berjejer lurus dengan jarak yang sama.`,
-            question: "Perintah manakah yang paling ringkas untuk mengambil semua baterai?",
-            codeSnippet: "Ulangi 4 kali {\n  Maju_1_Langkah();\n  Ambil_Baterai();\n}",
-            options: [
-              { id: "A", label: "A", text: "Ulangi 4 kali: [Maju 1 Langkah, Ambil Baterai]", isCorrect: true },
-              { id: "B", label: "B", text: "Maju 1 Langkah lalu Matikan Robot", isCorrect: false },
-              { id: "C", label: "C", text: "Belok Kanan 4 kali tanpa maju", isCorrect: false },
-              { id: "D", label: "D", text: "Mundur 4 Langkah", isCorrect: false },
-            ],
-            explanation: "Perulangan (Loop) menyederhanakan kode agar kita tidak perlu menulis perintah yang sama berkali-kali!",
-          },
-          {
-            id: `fb-loop-${ts}-2`,
-            storyPrompt: `Kibo ingin membuat pola lampu kelap-kelip menyala dan padam sebanyak 5 kali.`,
-            question: "Berapa angka pengulangan yang harus ditulis pada blok loop?",
-            codeSnippet: "Ulangi (?) kali {\n  Nyalakan_Lampu();\n  Tunggu(1_detik);\n  Matikan_Lampu();\n}",
-            options: [
-              { id: "A", label: "A", text: "3 kali", isCorrect: false },
-              { id: "B", label: "B", text: "5 kali", isCorrect: true },
-              { id: "C", label: "C", text: "1 kali saja", isCorrect: false },
-              { id: "D", label: "D", text: "0 kali", isCorrect: false },
-            ],
-            explanation: "Karena Kibo ingin lampu kelap-kelip 5 kali, maka angka pengulangan adalah 5!",
-          },
-          {
-            id: `fb-loop-${ts}-3`,
-            storyPrompt: `Kibo harus melompat melewati 3 batu sungai di arena ${topic}.`,
-            question: "Apa yang terjadi jika perintah pengulangan diatur ke 'Ulangi 2 kali'?",
-            codeSnippet: "Ulangi 2 kali {\n  Lompat_Batu();\n}",
-            options: [
-              { id: "A", label: "A", text: "Kibo sampai ke seberang dengan sempurna", isCorrect: false },
-              { id: "B", label: "B", text: "Kibo hanya melewati 2 batu dan belum sampai seberang", isCorrect: true },
-              { id: "C", label: "C", text: "Kibo berbalik arah", isCorrect: false },
-              { id: "D", label: "D", text: "Kibo melompati 5 batu", isCorrect: false },
-            ],
-            explanation: "Jumlah perulangan harus pas dengan jumlah target batu agar misi berhasil!",
-          },
-          {
-            id: `fb-loop-${ts}-4`,
-            storyPrompt: `Kibo ingin membersihkan 6 ubin kotor di laboratorium arena ${topic}.`,
-            question: "Manakah blok perulangan yang benar?",
-            codeSnippet: "Ulangi 6 kali {\n  Pel_Ubin();\n  Maju_1_Langkah();\n}",
-            options: [
-              { id: "A", label: "A", text: "Ulangi 6 kali: Pel Ubin -> Maju", isCorrect: true },
-              { id: "B", label: "B", text: "Ulangi 1 kali: Pel Ubin", isCorrect: false },
-              { id: "C", label: "C", text: "Ulangi 100 kali: Berputar", isCorrect: false },
-              { id: "D", label: "D", text: "Diam di tempat", isCorrect: false },
-            ],
-            explanation: "Blok perulangan 6 kali akan mengepel seluruh 6 ubin secara tuntas!",
-          },
-        ];
-
-      case "conditionals":
-        return [
-          {
-            id: `fb-cond-${ts}-1`,
-            storyPrompt: `Di jalur arena ${topic}, sensor Kibo mendeteksi lubang air di depannya.`,
-            question: "Bagaimana perintah percabangan logika yang aman?",
-            codeSnippet: "JIKA (ada_lubang_air) {\n  Lompat();\n} LAINNYA {\n  Jalan_Biasa();\n}",
-            options: [
-              { id: "A", label: "A", text: "JIKA ada lubang: Lompat, LAINNYA: Jalan Biasa", isCorrect: true },
-              { id: "B", label: "B", text: "JIKA ada lubang: Jatuh ke air", isCorrect: false },
-              { id: "C", label: "C", text: "Maju terus tanpa melihat sensor", isCorrect: false },
-              { id: "D", label: "D", text: "Matikan sensor robot", isCorrect: false },
-            ],
-            explanation: "Percabangan Jika-Maka (If-Else) memungkinkan robot mengambil keputusan cerdas saat menghadapi kondisi khusus!",
-          },
-          {
-            id: `fb-cond-${ts}-2`,
-            storyPrompt: `Kibo melihat gerbang keamanan di arena ${topic}. Gerbang hanya terbuka jika Kibo memiliki kartu akses.`,
-            question: "Apa yang akan dijalankan Kibo jika kartunya belum ditemukan?",
-            codeSnippet: "JIKA (punya_kartu_akses) {\n  Buka_Gerbang();\n} LAINNYA {\n  Cari_Kartu();\n}",
-            options: [
-              { id: "A", label: "A", text: "Buka Gerbang", isCorrect: false },
-              { id: "B", label: "B", text: "Cari Kartu", isCorrect: true },
-              { id: "C", label: "C", text: "Menabrak gerbang", isCorrect: false },
-              { id: "D", label: "D", text: "Tidur di depan gerbang", isCorrect: false },
-            ],
-            explanation: "Karena kondisi punya_kartu bernilai salah, komputer mengeksekusi blok LAINNYA (Cari_Kartu)!",
-          },
-          {
-            id: `fb-cond-${ts}-3`,
-            storyPrompt: `Sensor baterai Kibo berbunyi peringatan: Baterai tersisa kurang dari 20%.`,
-            question: "Instruksi darurat apa yang harus ada di dalam blok JIKA?",
-            codeSnippet: "JIKA (baterai < 20%) {\n  // Instruksi darurat di sini\n}",
-            options: [
-              { id: "A", label: "A", text: "Menari gembira", isCorrect: false },
-              { id: "B", label: "B", text: "Pergi ke Stasiun Pengisian Daya (Charge)", isCorrect: true },
-              { id: "C", label: "C", text: "Lari secepat mungkin", isCorrect: false },
-              { id: "D", label: "D", text: "Menghapus memori", isCorrect: false },
-            ],
-            explanation: "Kondisi baterai lemah harus memicu aksi pengisian daya agar robot tidak kehabisan energi!",
-          },
-          {
-            id: `fb-cond-${ts}-4`,
-            storyPrompt: `Kibo bertemu lampu lalu lintas koding: Lampu menyala HIJAU.`,
-            question: "Aksi apa yang sesuai dengan aturan?",
-            codeSnippet: "JIKA (lampu == 'HIJAU') {\n  Maju_Jalan();\n} LAINNYA {\n  Berhenti();\n}",
-            options: [
-              { id: "A", label: "A", text: "Maju Jalan", isCorrect: true },
-              { id: "B", label: "B", text: "Berhenti", isCorrect: false },
-              { id: "C", label: "C", text: "Mundur", isCorrect: false },
-              { id: "D", label: "D", text: "Belok putar arah", isCorrect: false },
-            ],
-            explanation: "Kondisi lampu HIJAU terpenuhi, maka robot mengeksekusi Maju_Jalan()!",
-          },
-        ];
-
-      case "variables":
-        return [
-          {
-            id: `fb-var-${ts}-1`,
-            storyPrompt: `Kibo memiliki kotak memori bernama 'Skor_Bintang'. Di awal petualangan, nilainya adalah 0.`,
-            question: "Ketika Kibo menemukan bintang emas bernilai 10, bagaimana perintah variabel yang benar?",
-            codeSnippet: "Skor_Bintang = 0;\nAmbil_Bintang() -> Skor_Bintang = Skor_Bintang + 10;",
-            options: [
-              { id: "A", label: "A", text: "Skor_Bintang = Skor_Bintang + 10", isCorrect: true },
-              { id: "B", label: "B", text: "Skor_Bintang = 0", isCorrect: false },
-              { id: "C", label: "C", text: "Hapus Skor_Bintang", isCorrect: false },
-              { id: "D", label: "D", text: "Skor_Bintang = Skor_Bintang - 10", isCorrect: false },
-            ],
-            explanation: "Variabel adalah kotak penyimpan data. Kita menambahkan 10 ke nilai lama agar skor bertambah!",
-          },
-          {
-            id: `fb-var-${ts}-2`,
-            storyPrompt: `Kibo memiliki variabel 'Sisa_Nyawa' yang bernilai 3. Kibo terkena sengatan listrik kecil dan kehilangan 1 nyawa.`,
-            question: "Berapa nilai variabel 'Sisa_Nyawa' sekarang?",
-            codeSnippet: "Sisa_Nyawa = 3;\nSisa_Nyawa = Sisa_Nyawa - 1;",
-            options: [
-              { id: "A", label: "A", text: "4 nyawa", isCorrect: false },
-              { id: "B", label: "B", text: "2 nyawa", isCorrect: true },
-              { id: "C", label: "C", text: "0 nyawa", isCorrect: false },
-              { id: "D", label: "D", text: "3 nyawa", isCorrect: false },
-            ],
-            explanation: "3 dikurangi 1 sama dengan 2. Nilai baru disimpan ke variabel Sisa_Nyawa!",
-          },
-          {
-            id: `fb-var-${ts}-3`,
-            storyPrompt: `Kibo ingin menyimpan nama pemain ke dalam komputer.`,
-            question: "Tipe kotak variabel apa yang paling tepat untuk menyimpan nama?",
-            codeSnippet: "Nama_Hero = 'Kibo Juara';",
-            options: [
-              { id: "A", label: "A", text: "Teks (String / Kata)", isCorrect: true },
-              { id: "B", label: "B", text: "Angka Matematika", isCorrect: false },
-              { id: "C", label: "C", text: "Kamera", isCorrect: false },
-              { id: "D", label: "D", text: "Kabel Listrik", isCorrect: false },
-            ],
-            explanation: "Nama dan kata-kata disimpan dalam variabel bertipe Teks (String) menggunakan tanda petik!",
-          },
-          {
-            id: `fb-var-${ts}-4`,
-            storyPrompt: `Di arena ${topic}, Kibo mengumpulkan 3 koin perak (+5) dan 1 koin emas (+10). Nilai awal koin adalah 0.`,
-            question: "Berapa total nilai variabel 'Dompet_Koin' Kibo sekarang?",
-            codeSnippet: "Dompet_Koin = (3 * 5) + 10;",
-            options: [
-              { id: "A", label: "A", text: "25 koin", isCorrect: true },
-              { id: "B", label: "B", text: "15 koin", isCorrect: false },
-              { id: "C", label: "C", text: "30 koin", isCorrect: false },
-              { id: "D", label: "D", text: "50 koin", isCorrect: false },
-            ],
-            explanation: "3 x 5 = 15, ditambah 10 = 25 koin tersimpan di variabel Dompet_Koin!",
-          },
-        ];
-
-      case "debugging":
-        return [
-          {
-            id: `fb-debug-${ts}-1`,
-            storyPrompt: `Kibo harus belok ke kiri untuk menghindari jebakan, tetapi robot malah belok ke kanan dan terjebak.`,
-            question: "Apa bug (kesalahan kode) pada program Kibo?",
-            codeSnippet: "// Program yang salah:\nMaju_1_Langkah();\nBelok_Kanan(); // <-- BUG!",
-            options: [
-              { id: "A", label: "A", text: "Ganti Belok_Kanan() menjadi Belok_Kiri()", isCorrect: true },
-              { id: "B", label: "B", text: "Hapus semua kode", isCorrect: false },
-              { id: "C", label: "C", text: "Matikan komputer", isCorrect: false },
-              { id: "D", label: "D", text: "Tambah perintah Belok_Kanan() 10 kali lagi", isCorrect: false },
-            ],
-            explanation: "Debugging adalah mencari dan memperbaiki kesalahan. Mengubah arah belok ke kiri menyelesaikan masalah!",
-          },
-          {
-            id: `fb-debug-${ts}-2`,
-            storyPrompt: `Robot Kibo berjalan berputar-putar tanpa henti dan tidak pernah berhenti.`,
-            question: "Kesalahan jenis apa yang sedang dialami robot?",
-            codeSnippet: "Ulangi SELAMANYA {\n  Berputar();\n}",
-            options: [
-              { id: "A", label: "A", text: "Perulangan tanpa henti (Infinite Loop)", isCorrect: true },
-              { id: "B", label: "B", text: "Komputer rusak terbakar", isCorrect: false },
-              { id: "C", label: "C", text: "Robot kehabisan baterai", isCorrect: false },
-              { id: "D", label: "D", text: "Baterai terlalu penuh", isCorrect: false },
-            ],
-            explanation: "Infinite loop terjadi ketika perintah perulangan tidak memiliki batas berhenti!",
-          },
-          {
-            id: `fb-debug-${ts}-3`,
-            storyPrompt: `Kibo ingin membuka pintu tetapi mencoba memutar kunci sebelum memasukkannya ke lubang kunci.`,
-            question: "Bagaimana urutan instruksi yang telah diperbaiki?",
-            codeSnippet: "// Urutan yang salah:\nPutar_Kunci();\nMasukkan_Kunci();",
-            options: [
-              { id: "A", label: "A", text: "1. Masukkan_Kunci() -> 2. Putar_Kunci()", isCorrect: true },
-              { id: "B", label: "B", text: "1. Putar_Kunci() -> 2. Lempar_Kunci()", isCorrect: false },
-              { id: "C", label: "C", text: "1. Rusak_Pintu()", isCorrect: false },
-              { id: "D", label: "D", text: "Tidak perlu kunci", isCorrect: false },
-            ],
-            explanation: "Instruksi harus dijalankan dalam urutan logis yang benar agar berhasil membuka pintu!",
-          },
-          {
-            id: `fb-debug-${ts}-4`,
-            storyPrompt: `Program Kibo tidak bisa berjalan karena ada tanda kurung tutup yang hilang: 'Ulangi 3 kali {'`,
-            question: "Bagaimana cara memperbaikinya?",
-            codeSnippet: "Ulangi 3 kali {\n  Maju_1_Langkah();\n// Kurung tutup hilang!",
-            options: [
-              { id: "A", label: "A", text: "Tambahkan tanda kurung kurawal tutup '}' di akhir blok", isCorrect: true },
-              { id: "B", label: "B", text: "Hapus kata 'Ulangi'", isCorrect: false },
-              { id: "C", label: "C", text: "Ganti dengan angka 0", isCorrect: false },
-              { id: "D", label: "D", text: "Biarkan saja", isCorrect: false },
-            ],
-            explanation: "Setiap blok yang dibuka dengan kurung kurawal buka '{' wajib ditutup dengan '}'!",
-          },
-        ];
-
-      case "algorithms":
-        return [
-          {
-            id: `fb-algo-${ts}-1`,
-            storyPrompt: `Kibo ingin merancang algoritma untuk membuat segelas susu cokelat.`,
-            question: "Langkah manakah yang paling tepat sebagai langkah awal (Langkah 1)?",
-            codeSnippet: "Langkah 1: (?)\nLangkah 2: Masukkan bubuk cokelat ke gelas\nLangkah 3: Tuang air hangat lalu aduk",
-            options: [
-              { id: "A", label: "A", text: "Siapkan gelas bersih dan sendok", isCorrect: true },
-              { id: "B", label: "B", text: "Minum susu sampai habis", isCorrect: false },
-              { id: "C", label: "C", text: "Cuci gelas yang sudah kosong", isCorrect: false },
-              { id: "D", label: "D", text: "Tiduran di sofa", isCorrect: false },
-            ],
-            explanation: "Algoritma selalu dimulai dari langkah persiapan awal sebelum melakukan aksi berikutnya!",
-          },
-          {
-            id: `fb-algo-${ts}-2`,
-            storyPrompt: `Kibo ingin menemukan jalan terpendek menuju stasiun roket di arena ${topic}. Jalur A butuh 5 langkah, Jalur B butuh 8 langkah.`,
-            question: "Jalur manakah yang lebih efisien menurut algoritma?",
-            codeSnippet: "Jalur_A = 5 langkah;\nJalur_B = 8 langkah;",
-            options: [
-              { id: "A", label: "A", text: "Jalur A (karena lebih hemat langkah dan energi)", isCorrect: true },
-              { id: "B", label: "B", text: "Jalur B (karena lebih jauh)", isCorrect: false },
-              { id: "C", label: "C", text: "Kedua jalur sama saja", isCorrect: false },
-              { id: "D", label: "D", text: "Tidak memilih jalur mana pun", isCorrect: false },
-            ],
-            explanation: "Algoritma yang baik memilih solusi terpendek dan paling efisien untuk mencapai tujuan!",
-          },
-          {
-            id: `fb-algo-${ts}-3`,
-            storyPrompt: `Metode Dekomposisi: Memecah tugas besar 'Membangun Robot' menjadi bagian-bagian kecil.`,
-            question: "Manakah pecahan tugas kecil yang tepat?",
-            codeSnippet: "Tugas Besar: Bangun Robot Kibo\n1. Rakit Kaki -> 2. Pasang Badan -> 3. Pasang Kepala & Sensor",
-            options: [
-              { id: "A", label: "A", text: "Rakit Kaki -> Pasang Badan -> Pasang Kepala & Sensor", isCorrect: true },
-              { id: "B", label: "B", text: "Langsung terbangkan robot ke angkasa", isCorrect: false },
-              { id: "C", label: "C", text: "Bongkar semua barang", isCorrect: false },
-              { id: "D", label: "D", text: "Cat dinding rumah", isCorrect: false },
-            ],
-            explanation: "Dekomposisi algoritma mempermudah kita menyelesaikan masalah kompleks dengan membaginya menjadi langkah teratur!",
-          },
-          {
-            id: `fb-algo-${ts}-4`,
-            storyPrompt: `Kibo mengurutkan 3 angka acak [9, 2, 5] dari yang terkecil ke yang terbesar.`,
-            question: "Bagaimana hasil urutan algoritma pengurutan (Sorting) yang benar?",
-            codeSnippet: "Acak: [9, 2, 5] -> Algoritma Sorting -> Hasil: (?)",
-            options: [
-              { id: "A", label: "A", text: "[2, 5, 9]", isCorrect: true },
-              { id: "B", label: "B", text: "[9, 5, 2]", isCorrect: false },
-              { id: "C", label: "C", text: "[5, 2, 9]", isCorrect: false },
-              { id: "D", label: "D", text: "[2, 9, 5]", isCorrect: false },
-            ],
-            explanation: "Algoritma pengurutan mengatur data dari nilai terkecil (2), lalu (5), hingga terbesar (9)!",
-          },
-        ];
-
-      case "logic":
-      default:
-        return [
-          {
-            id: `fb-logic-${ts}-1`,
-            storyPrompt: `Robot Kibo berdiri di titik awal arena ${topic}. Kibo perlu melangkah 3 langkah ke depan untuk mencapai bendera kemenangan.`,
-            question: "Urutan perintah manakah yang benar untuk sampai ke bendera?",
-            codeSnippet: "[Maju 1 Langkah] -> [Maju 1 Langkah] -> [Maju 1 Langkah] -> [Raih Bendera]",
-            options: [
-              { id: "A", label: "A", text: "Maju 1 Langkah, Maju 1 Langkah, Maju 1 Langkah", isCorrect: true },
-              { id: "B", label: "B", text: "Mundur 3 Langkah", isCorrect: false },
-              { id: "C", label: "C", text: "Belok Kiri 3 kali di tempat", isCorrect: false },
-              { id: "D", label: "D", text: "Diam tanpa bergerak", isCorrect: false },
-            ],
-            explanation: "Tiga perintah maju berurutan akan membawa robot melangkah 3 kotak ke depan tepat ke bendera!",
-          },
-          {
-            id: `fb-logic-${ts}-2`,
-            storyPrompt: `Kibo ingin mengambil kunci emas di sebelah kanannya setelah melangkah 1 kali ke depan.`,
-            question: "Bagaimana sekuensial (urutan) instruksi yang tepat?",
-            codeSnippet: "Langkah 1: Maju 1 Langkah;\nLangkah 2: Belok Kanan;\nLangkah 3: Ambil Kunci;",
-            options: [
-              { id: "A", label: "A", text: "Maju 1 Langkah -> Belok Kanan -> Ambil Kunci", isCorrect: true },
-              { id: "B", label: "B", text: "Ambil Kunci -> Maju 1 Langkah -> Mundur", isCorrect: false },
-              { id: "C", label: "C", text: "Belok Kiri -> Lompat -> Berhenti", isCorrect: false },
-              { id: "D", label: "D", text: "Maju 10 Langkah langsung", isCorrect: false },
-            ],
-            explanation: "Program harus dijalankan berurutan: robot harus mendekati kunci lalu belok dan mengambilnya!",
-          },
-          {
-            id: `fb-logic-${ts}-3`,
-            storyPrompt: `Kibo menghadapi jalan buntu di arena ${topic}. Untuk berbalik ke arah belakang, berapa kali Kibo harus belok kanan?`,
-            question: "Berapa kali putaran 'Belok Kanan' (90 derajat) untuk putar balik?",
-            codeSnippet: "Putar Balik (180 derajat) = Belok Kanan (?) kali",
-            options: [
-              { id: "A", label: "A", text: "1 kali", isCorrect: false },
-              { id: "B", label: "B", text: "2 kali", isCorrect: true },
-              { id: "C", label: "C", text: "4 kali", isCorrect: false },
-              { id: "D", label: "D", text: "0 kali", isCorrect: false },
-            ],
-            explanation: "Dua kali belok 90 derajat menghasilkan putaran 180 derajat yang memutar balik arah robot!",
-          },
-          {
-            id: `fb-logic-${ts}-4`,
-            storyPrompt: `Kibo harus menyalakan 2 saklar berurutan: Saklar A dulu baru Saklar B.`,
-            question: "Manakah urutan instruksi yang tepat?",
-            codeSnippet: "[Nyalakan Saklar A] -> [Nyalakan Saklar B]",
-            options: [
-              { id: "A", label: "A", text: "Nyalakan Saklar A lalu Nyalakan Saklar B", isCorrect: true },
-              { id: "B", label: "B", text: "Nyalakan Saklar B lalu Matikan Saklar A", isCorrect: false },
-              { id: "C", label: "C", text: "Matikan kedua saklar", isCorrect: false },
-              { id: "D", label: "D", text: "Lewati kedua saklar", isCorrect: false },
-            ],
-            explanation: "Prinsip sekuensial adalah mengeksekusi instruksi pertama sampai selesai sebelum instruksi kedua!",
-          },
-        ];
-    }
+    return getCategoryFallbackQuestions(category, topic);
   }
 
   /**
@@ -781,7 +449,10 @@ Jawablah sebagai Robot Kibo dengan ramah dan edukatif!`;
   }
   /**
    * Gemini Touchpoint 5: Generate a rich AI-powered Learning Module for "Modul Belajar"
-   * Returns a full module with 3 units, each with a deep explanation, analogy, code pattern, and mini quiz.
+   * Pattern:
+   * - Hal 1: Explanation, theory, with Analogy placed in the middle, and deep computation link.
+   * - Hal 2: Real code example with step-by-step explanation and Kibo tips.
+   * - Hal 3: Quiz covering the previous unit materials with relevant questions and correct answers.
    */
   async generateLearningModule(params: {
     category: string;
@@ -791,80 +462,137 @@ Jawablah sebagai Robot Kibo dengan ramah dan edukatif!`;
     worldName: string;
     fundamentalConcept: string;
     sampleCodePattern: string;
+    codingExpLevel?: string;
+    learningGoal?: string;
   }): Promise<any> {
-    const { category, grade, interest, topicName, worldName, fundamentalConcept, sampleCodePattern } = params;
+    const {
+      category,
+      grade,
+      interest,
+      topicName,
+      worldName,
+      fundamentalConcept,
+      sampleCodePattern,
+      codingExpLevel,
+      learningGoal,
+    } = params;
 
-    const systemInstruction = `Kamu adalah perancang kurikulum koding interaktif untuk anak SD (kelas ${grade}, usia 7-12 tahun) di platform KibCode.
-Buatlah modul belajar yang sangat kaya, menyenangkan, dan mendidik tentang konsep "${fundamentalConcept}".
-Karakter: Robot Kibo, sahabat belajar ceria.
+    const safeGrade = Math.min(6, Math.max(1, grade || 3));
+    let difficultyGuidance = "";
+    if (safeGrade <= 2) {
+      difficultyGuidance = `Tingkat SD Kelas ${safeGrade} (Usia 6-8 tahun): Gunakan kosakata sangat sederhana, bahasa ceria, kalimat ringkas, dan visual blok perintah berpanah [Maju] -> [Belok]. Analogi dari mainan atau aktivitas harian sederhana.`;
+    } else if (safeGrade <= 4) {
+      difficultyGuidance = `Tingkat SD Kelas ${safeGrade} (Usia 8-10 tahun): Bahasa santun, ramah, dan interaktif. Gunakan blok instruksi dengan parameter (misal: ulang(3) { maju(); }). Analogi terhubung dengan petualangan di dunia ${worldName}.`;
+    } else {
+      difficultyGuidance = `Tingkat SD Kelas ${safeGrade} (Usia 10-12 tahun): Bahasa komputasional yang menarik (efisiensi, algoritma, variabel, kondisi logis). Kode berformat pseudocode rapi. Analogi pemecahan masalah (problem solving).`;
+    }
+
+    const expGuidance = codingExpLevel
+      ? `Pengalaman koding siswa: ${codingExpLevel}. Sesuaikan kedalaman materi agar menantang namun mudah dipahami.`
+      : "Siswa pemula, utamakan penjelasan yang mudah dimengerti.";
+
+    const systemInstruction = `Kamu adalah perancang kurikulum koding interaktif untuk anak SD (Kelas ${safeGrade}, usia 7-12 tahun) di platform KibCode.
+Karakter: Robot Kibo, sahabat belajar ceria dan suportif.
 Dunia tematik: "${worldName}" (minat siswa: ${interest}).
-Output HARUS murni JSON valid sesuai skema. Bahasa Indonesia ramah anak SD.`;
+Target Pedagogi: Konsep "${fundamentalConcept}".
+Pedoman Kesulitan: ${difficultyGuidance}
+${expGuidance}
+Output HARUS murni JSON valid sesuai skema yang diminta, tanpa markdown fences. Gunakan Bahasa Indonesia yang ramah, hangat, dan mendidik.`;
 
-    const prompt = `Buat 1 modul belajar koding bertema "${topicName}" untuk siswa SD Kelas ${grade}.
+    const prompt = `Rancang 1 modul belajar koding bertema "${topicName}" untuk siswa SD Kelas ${safeGrade}.
 Kategori: ${category} (${fundamentalConcept}).
 Dunia tema: ${worldName}.
+Tujuan belajar siswa: ${learningGoal || "Menguasai koding dasar dengan gembira"}.
+
+ATURAN STRUKTUR MODUL WAJIB:
+Modul harus terdiri dari tepat 3 unit yang merepresentasikan 3 Halaman Pembelajaran berurutan:
+- Hal 1 (unit 1): Teori & Pengenalan Konsep (Penjelasan teori awal, diletakkan ANALOGI dunia nyata di bagian tengah, dilanjutkan penjelasan mendalam).
+- Hal 2 (unit 2): Contoh Kode & Penjelasannya (Contoh kode praktis yang relevan dengan ${worldName}, diikuti penjelasan baris demi baris dan tips dari Robot Kibo).
+- Hal 3 (unit 3): Kuis Pemahaman Materi (Menguji konsep teori dari Hal 1 dan logika kode dari Hal 2 dengan pertanyaan relevan dan opsi jawaban jelas).
 
 Skema JSON WAJIB:
 {
-  "title": "Judul modul menarik (tidak pakai awalan 'Modul Belajar:')",
-  "concept": "Nama konsep coding singkat",
-  "summary": "Deskripsi 2-3 kalimat menarik tentang isi modul ini",
+  "title": "Judul modul menarik dan ramah anak (tanpa awalan 'Modul:')",
+  "concept": "${fundamentalConcept}",
+  "summary": "Ringkasan 2-3 kalimat menarik tentang isi materi yang akan dipelajari bersama Robot Kibo",
   "units": [
     {
       "id": "unit-${category}-1",
-      "title": "Judul unit 1: Pengenalan",
-      "description": "Penjelasan panjang dan mendalam (4-6 kalimat) tentang konsep ${fundamentalConcept} dengan bahasa anak SD. Sertakan contoh nyata dari dunia ${worldName}. Jelaskan MENGAPA konsep ini penting dan BAGAIMANA cara kerjanya secara detail.",
-      "analogy": "Analogi unik dan seru dari kehidupan sehari-hari anak (bukan resep kue biasa, cari yang kreatif dan relevan dengan ${worldName})",
-      "codePattern": "${sampleCodePattern}",
-      "miniQuiz": {
-        "question": "Pertanyaan pemahaman spesifik tentang ${fundamentalConcept}",
-        "options": [
-          { "id": "A", "text": "Jawaban benar yang menunjukkan pemahaman konsep", "isCorrect": true },
-          { "id": "B", "text": "Jawaban salah tapi masuk akal", "isCorrect": false },
-          { "id": "C", "text": "Jawaban salah yang lucu", "isCorrect": false }
-        ],
-        "explanation": "Penjelasan 2-3 kalimat mengapa jawaban A benar dan apa yang bisa dipelajari"
-      }
+      "title": "Teori & Konsep: ${fundamentalConcept}",
+      "description": "Penjelasan teori awal yang ramah anak (3-4 kalimat) mengenai apa itu konsep ${fundamentalConcept} dan mengapa komputer memerlukannya.",
+      "analogy": "Analogi dunia nyata yang kreatif dan sangat akrab bagi anak SD (diletakkan di tengah sebagai jembatan pemahaman).",
+      "deepExplanation": "Penjelasan lanjutan (3-4 kalimat) yang menghubungkan analogi tersebut dengan cara kerja koding pada program atau robot.",
+      "codePattern": "",
+      "miniQuiz": null
     },
     {
       "id": "unit-${category}-2",
-      "title": "Judul unit 2: Eksplorasi Pola",
-      "description": "Penjelasan mendalam (4-6 kalimat) tentang bagaimana pola ${fundamentalConcept} digunakan. Berikan 2-3 contoh penggunaan nyata dalam game atau kehidupan. Jelaskan variasi-variasinya.",
-      "analogy": "Analogi berbeda dari unit 1, lebih interaktif",
-      "codePattern": "Contoh kode berbeda yang menunjukkan variasi pola ${category}",
-      "miniQuiz": {
-        "question": "Pertanyaan yang menguji kemampuan menerapkan pola ${fundamentalConcept}",
-        "options": [
-          { "id": "A", "text": "Jawaban benar", "isCorrect": true },
-          { "id": "B", "text": "Jawaban salah", "isCorrect": false },
-          { "id": "C", "text": "Jawaban salah", "isCorrect": false }
-        ],
-        "explanation": "Penjelasan mendalam mengapa ini benar"
-      }
+      "title": "Contoh Kode & Cara Kerjanya",
+      "description": "Pengantar singkat contoh kode.",
+      "analogy": "",
+      "deepExplanation": "",
+      "codePattern": "${sampleCodePattern}",
+      "codeExplanation": "Penjelasan mendalam dan mudah dipahami (4-5 kalimat) tentang bagaimana setiap perintah dalam contoh kode di atas dijalankan selangkah demi selangkah.",
+      "tips": "Tips cerdas atau trik seru dari Robot Kibo untuk menghindari kesalahan saat menyusun kode ini.",
+      "miniQuiz": null
     },
     {
       "id": "unit-${category}-3",
-      "title": "Judul unit 3: Misi Praktik",
-      "description": "Penjelasan (4-6 kalimat) tentang bagaimana menerapkan ${fundamentalConcept} dalam proyek nyata atau game. Berikan tips dan trik dari Robot Kibo. Ceritakan kisah sukses menggunakan konsep ini.",
-      "analogy": "Analogi misi petualangan yang memotivasi siswa untuk praktek",
-      "codePattern": "Contoh kode misi akhir yang menggabungkan semua yang dipelajari",
+      "title": "Kuis Tantangan Pemahaman",
+      "description": "Rangkuman singkat dan motivasi sebelum menjawab kuis pemahaman.",
+      "analogy": "",
+      "deepExplanation": "",
+      "codePattern": "",
       "miniQuiz": {
-        "question": "Pertanyaan motivasi dan refleksi tentang ${fundamentalConcept}",
+        "question": "Pertanyaan pemahaman konseptual dari materi Hal 1",
         "options": [
-          { "id": "A", "text": "Jawaban positif dan percaya diri", "isCorrect": true },
-          { "id": "B", "text": "Jawaban pesimis", "isCorrect": false }
+          { "id": "A", "text": "Pilihan tepat", "isCorrect": true },
+          { "id": "B", "text": "Pilihan keliru", "isCorrect": false },
+          { "id": "C", "text": "Pilihan salah", "isCorrect": false }
         ],
-        "explanation": "Kata-kata penyemangat dari Robot Kibo tentang perjalanan belajar"
+        "explanation": "Penjelasan ramah mengapa jawaban A benar.",
+        "questions": [
+          {
+            "id": "q1",
+            "question": "Pertanyaan 1 menguji konsep teori dan analogi dari Hal 1...",
+            "options": [
+              { "id": "A", "text": "Jawaban yang benar dan tepat menunjukkan pemahaman konsep", "isCorrect": true },
+              { "id": "B", "text": "Jawaban yang salah namun masuk akal", "isCorrect": false },
+              { "id": "C", "text": "Jawaban yang salah dan lucu", "isCorrect": false }
+            ],
+            "explanation": "Penjelasan konsep teori Hal 1."
+          },
+          {
+            "id": "q2",
+            "question": "Pertanyaan 2 menguji analisis contoh kode dari Hal 2...",
+            "options": [
+              { "id": "A", "text": "Jawaban salah", "isCorrect": false },
+              { "id": "B", "text": "Jawaban yang benar sesuai alur kode Hal 2", "isCorrect": true },
+              { "id": "C", "text": "Jawaban keliru", "isCorrect": false }
+            ],
+            "explanation": "Penjelasan cara kerja baris kode Hal 2."
+          },
+          {
+            "id": "q3",
+            "question": "Pertanyaan 3 skenario aplikasi dan logika pemecahan masalah...",
+            "options": [
+              { "id": "A", "text": "Jawaban yang tepat untuk menyelesaikan skenario", "isCorrect": true },
+              { "id": "B", "text": "Jawaban yang salah", "isCorrect": false },
+              { "id": "C", "text": "Jawaban yang membingungkan komputer", "isCorrect": false }
+            ],
+            "explanation": "Penjelasan penyelesaian masalah bersama Robot Kibo."
+          }
+        ]
       }
     }
   ]
 }
-Pastikan setiap 'description' benar-benar panjang (4-6 kalimat) dan informatif. JANGAN gunakan deskripsi yang pendek atau generik!`;
+Pastikan seluruh kalimat komunikatif, edukatif, dan tidak generik!`;
 
     try {
       const rawJson = await this.callGemini(prompt, systemInstruction, {
         responseMimeType: "application/json",
-        temperature: 0.75,
+        temperature: 0.7,
         maxOutputTokens: 4000,
       });
 
@@ -883,7 +611,7 @@ Pastikan setiap 'description' benar-benar panjang (4-6 kalimat) dan informatif. 
         summary: parsed.summary || `Pelajari konsep ${fundamentalConcept} bersama Robot Kibo di dunia ${worldName}.`,
         units: Array.isArray(parsed.units) && parsed.units.length >= 3
           ? parsed.units
-          : this.getModuleFallbackUnits(category, topicName, worldName, fundamentalConcept, sampleCodePattern),
+          : this.getModuleFallbackUnits(category, topicName, worldName, fundamentalConcept, sampleCodePattern, safeGrade),
       };
     } catch (err) {
       console.warn("Module generation fallback triggered:", err);
@@ -891,7 +619,7 @@ Pastikan setiap 'description' benar-benar panjang (4-6 kalimat) dan informatif. 
         title: topicName,
         concept: fundamentalConcept,
         summary: `Pelajari konsep ${fundamentalConcept} bersama Robot Kibo di dunia ${worldName}.`,
-        units: this.getModuleFallbackUnits(category, topicName, worldName, fundamentalConcept, sampleCodePattern),
+        units: this.getModuleFallbackUnits(category, topicName, worldName, fundamentalConcept, sampleCodePattern, safeGrade),
       };
     }
   }
@@ -901,55 +629,113 @@ Pastikan setiap 'description' benar-benar panjang (4-6 kalimat) dan informatif. 
     topicName: string,
     worldName: string,
     fundamentalConcept: string,
-    sampleCodePattern: string
+    sampleCodePattern: string,
+    grade: number = 3
   ): any[] {
+    const q1 = {
+      id: "q1",
+      question: `Berdasarkan materi di Hal. 1, apa alasan utama kita membutuhkan konsep ${fundamentalConcept} dalam pemrograman?`,
+      options: [
+        {
+          id: "A",
+          text: `Agar komputer mengerti dan mengeksekusi instruksi secara teratur tanpa kesalahan`,
+          isCorrect: true,
+        },
+        {
+          id: "B",
+          text: `Hanya agar kode terlihat rumit dan layar monitor mengeluarkan bunyi bising`,
+          isCorrect: false,
+        },
+        {
+          id: "C",
+          text: `Supaya komputer bisa langsung membaca pikiran kita tanpa perlu instruksi`,
+          isCorrect: false,
+        },
+      ],
+      explanation: `Tepat sekali! Komputer membutuhkan instruksi yang logis dan jelas. Konsep ${fundamentalConcept} menjadi panduan agar aksi program berjalan sesuai yang kita harapkan.`,
+    };
+
+    const q2 = {
+      id: "q2",
+      question: `Perhatikan contoh kode di Hal. 2. Apa yang akan terjadi jika kita menjalankan blok instruksi tersebut langkah demi langkah?`,
+      options: [
+        {
+          id: "A",
+          text: `Komputer mematikan semua program seketika`,
+          isCorrect: false,
+        },
+        {
+          id: "B",
+          text: `Robot Kibo membaca baris instruksi dari atas ke bawah dan menjalankan aksinya secara berurutan`,
+          isCorrect: true,
+        },
+        {
+          id: "C",
+          text: `Instruksi dilewati secara acak sehingga robot melompat tanpa arah`,
+          isCorrect: false,
+        },
+      ],
+      explanation: `Benar! Komputer membaca perintah baris demi baris, memastikan setiap tindakan pada kode dijalankan sesuai urutannya.`,
+    };
+
+    const q3 = {
+      id: "q3",
+      question: `Jika Robot Kibo menghadapi rintangan tak terduga di dunia ${worldName}, bagaimana kita menerapkan ${fundamentalConcept} untuk memperbaikinya?`,
+      options: [
+        {
+          id: "A",
+          text: `Memeriksa urutan instruksi kembali dan memastikan logika perintah sudah tepat`,
+          isCorrect: true,
+        },
+        {
+          id: "B",
+          text: `Menghapus seluruh file dan membiarkan robot terjebak`,
+          isCorrect: false,
+        },
+        {
+          id: "C",
+          text: `Menekan semua tombol keyboard sekaligus dengan cepat`,
+          isCorrect: false,
+        },
+      ],
+      explanation: `Hebat! Sebagai programmer cerdas, kita menganalisis alur logika dan urutan perintah untuk menyelesaikan rintangan dengan tepat.`,
+    };
+
     return [
       {
         id: `unit-${category}-1`,
-        title: `Pengenalan Dasar: ${fundamentalConcept}`,
-        description: `Konsep ${fundamentalConcept} adalah salah satu fondasi paling penting dalam dunia koding. Bayangkan kamu sedang menjadi sutradara film di dunia ${worldName} — kamu perlu memberikan instruksi yang tepat dan berurutan kepada para aktor (robot) agar cerita berjalan dengan benar. ${fundamentalConcept} bekerja persis seperti itu: memberikan urutan perintah yang logis sehingga komputer tahu apa yang harus dilakukan selangkah demi selangkah. Tanpa konsep ini, program akan bingung dan tidak tahu harus memulai dari mana. Itulah mengapa para programmer selalu mempelajari ${fundamentalConcept} sebagai langkah pertama belajar koding!`,
-        analogy: `Bayangkan kamu bermain di dunia ${worldName} dan Robot Kibo harus melewati rintangan. Kamu tidak bisa berteriak "Sampai di tujuan!" begitu saja — kamu harus memberikan petunjuk langkah per langkah: "Maju 3 kotak, belok kanan, lompat batu!" Itulah inti dari ${fundamentalConcept}!`,
-        codePattern: sampleCodePattern,
-        miniQuiz: {
-          question: `Mengapa konsep ${fundamentalConcept} sangat penting dalam pemrograman?`,
-          options: [
-            { id: "A", text: "Agar komputer mengerti perintah secara teratur dan tidak bingung dalam menjalankan program", isCorrect: true },
-            { id: "B", text: "Hanya untuk membuat layar komputer terlihat lebih bagus dan berwarna-warni", isCorrect: false },
-            { id: "C", text: "Supaya komputer menjadi lebih cepat panas saat digunakan", isCorrect: false },
-          ],
-          explanation: `Komputer adalah mesin yang sangat cerdas, tetapi ia hanya bisa mengikuti instruksi yang terstruktur dan berurutan. Konsep ${fundamentalConcept} memastikan program berjalan lancar tanpa error karena setiap langkah jelas dan logis!`,
-        },
+        title: `Teori & Konsep: ${fundamentalConcept}`,
+        description: `Konsep ${fundamentalConcept} adalah salah satu fondasi paling penting dalam dunia koding. Komputer adalah mesin yang sangat patuh, namun ia tidak bisa menebak apa yang ada di pikiran kita. Itulah mengapa kita membutuhkan ${fundamentalConcept} agar komputer mengerti instruksi yang harus dijalankannya tanpa ragu!`,
+        analogy: `Bayangkan kamu sedang memandu Robot Kibo di dunia ${worldName}. Jika kamu menyuruhnya melompat sebelum ia mendekati rintangan, Kibo bisa menabrak. Sama seperti kehidupan sehari-hari, kita harus memahami aturan dan urutan agar segala sesuatu berjalan dengan rapi.`,
+        deepExplanation: `Dalam koding, ${fundamentalConcept} membantu kita merancang instruksi yang jelas dan terarah. Setiap baris kode yang kamu tulis akan diproses oleh komputer secara pasti, sehingga aplikasi atau game yang kamu buat berjalan lancar tanpa kebingungan.`,
+        codePattern: "",
+        miniQuiz: null,
       },
       {
         id: `unit-${category}-2`,
-        title: `Eksplorasi Pola: ${fundamentalConcept}`,
-        description: `Setelah memahami dasar ${fundamentalConcept}, saatnya kita menjelajahi pola-pola seru yang bisa dibuat! Di dunia ${worldName}, ada begitu banyak situasi yang membutuhkan keahlian ${fundamentalConcept} — mulai dari mengatur pergerakan robot, mengelola sumber daya game, hingga membangun sistem yang rumit. Pola ${category} sangat fleksibel: kamu bisa menggunakannya berulang kali dengan cara berbeda untuk memecahkan berbagai jenis masalah. Para programmer profesional menggunakan pola ini setiap hari! Misalnya, aplikasi media sosial yang kamu suka menggunakan prinsip ini untuk menampilkan postingan, dan game favoritmu menggunakannya untuk menggerakkan karakter. Dengan berlatih berbagai pola, kamu akan semakin mahir dalam berpikir secara logis dan terstruktur seperti seorang programmer sejati!`,
-        analogy: `Di dunia ${worldName}, setiap misi punya pola unik tersendiri. Seperti melodi musik yang bisa dimainkan dengan variasi berbeda namun tetap indah, begitu pula pola ${fundamentalConcept} yang bisa diterapkan dalam berbagai situasi koding!`,
-        codePattern: `// Variasi Pola di ${worldName}\n${sampleCodePattern}\n// Pola ini bisa dimodifikasi sesuai kebutuhan!`,
-        miniQuiz: {
-          question: "Apa yang terjadi jika urutan instruksi dalam program diubah secara sembarangan?",
-          options: [
-            { id: "A", text: "Hasil program bisa berbeda atau robot akan salah arah dan tidak mencapai tujuan", isCorrect: true },
-            { id: "B", text: "Program selalu menghasilkan hasil yang benar apapun urutannya", isCorrect: false },
-            { id: "C", text: "Monitor komputer akan berubah menjadi warna emas berkilau", isCorrect: false },
-          ],
-          explanation: "Urutan instruksi menentukan seluruh alur kerja komputer. Sama seperti resep masakan — jika kamu memanggang tepung sebelum mencampurnya, hasilnya akan sangat berbeda! Urutan yang benar adalah kunci keberhasilan program.",
-        },
+        title: `Contoh Kode & Cara Kerjanya`,
+        description: `Perhatikan blok kode di bawah ini yang digunakan Robot Kibo di dunia ${worldName}:`,
+        analogy: "",
+        deepExplanation: "",
+        codePattern: sampleCodePattern,
+        codeExplanation: `Pada contoh kode di atas, Robot Kibo menjalankan perintah secara terstruktur. Komputer akan membaca perintah dari blok pertama, memproses kondisinya, lalu melanjutkan ke blok berikutnya hingga target tercapai. Dengan cara ini, kode menjadi rapi dan mudah dibaca oleh siapa saja!`,
+        tips: `Tips Cerdas Robot Kibo: Selalu periksa kembali setiap baris kodemu. Jika ada langkah yang terlewat, jangan khawatir! Debugging atau memperbaiki kode adalah bagian paling seru dari menjadi seorang programmer!`,
+        miniQuiz: null,
       },
       {
         id: `unit-${category}-3`,
-        title: `Misi Praktik: ${topicName}`,
-        description: `Selamat! Kamu sudah mempelajari teori dan pola ${fundamentalConcept}. Kini saatnya misi sesungguhnya dimulai! Robot Kibo menunggumu di arena tantangan dunia ${worldName} untuk membuktikan bahwa kamu sudah siap menjadi programmer cilik yang hebat. Ingat tips penting dari Kibo: selalu rencanakan langkahmu sebelum mulai menulis kode, pecah masalah besar menjadi langkah-langkah kecil, dan jangan takut untuk mencoba lagi jika ada kesalahan — setiap error adalah pelajaran berharga! Para programmer terkenal dunia seperti yang menciptakan game favoritmu pun sering mengalami bug. Yang membedakan programmer hebat adalah mereka tidak menyerah dan terus belajar dari setiap percobaan. Kamu bisa melakukannya!`,
-        analogy: `Bayangkan kamu adalah pahlawan di dunia ${worldName} yang sudah menyelesaikan pelatihan. Sekarang saatnya membuktikan kemampuanmu di medan pertempuran sesungguhnya! Setiap tantangan yang kamu selesaikan akan menambah kekuatan dan kebijaksanaanmu sebagai programmer!`,
-        codePattern: `// Misi Final: Gabungkan semua yang telah dipelajari!\nMisi_Selesai() -> Dapatkan_Trofi("${topicName}", 50_Bintang);\nRobot_Kibo.berkata("Luar biasa! Kamu adalah bintang koding! ⭐");`,
+        title: `Kuis Tantangan Pemahaman`,
+        description: `Uji pemahamanmu setelah mempelajari teori di Hal. 1 dan contoh kode di Hal. 2:`,
+        analogy: "",
+        deepExplanation: "",
+        codePattern: "",
         miniQuiz: {
-          question: "Siapa programmer cilik terhebat yang siap menaklukkan tantangan koding bersama Robot Kibo?",
-          options: [
-            { id: "A", text: "Aku! Karena aku rajin belajar, tidak takut mencoba, dan selalu semangat bersama Robot Kibo!", isCorrect: true },
-            { id: "B", text: "Tidak ada yang bisa menjadi programmer hebat, koding itu terlalu sulit", isCorrect: false },
-          ],
-          explanation: "Dengan terus mencoba, tidak takut salah, dan belajar dari setiap pengalaman, kamu pasti akan menjadi programmer cilik yang luar biasa! Robot Kibo selalu ada untuk mendukungmu dalam setiap langkah petualangan koding! 🤖⭐",
+          question: q1.question,
+          options: q1.options,
+          explanation: q1.explanation,
+          questions: [q1, q2, q3],
         },
+        quizQuestions: [q1, q2, q3],
       },
     ];
   }
