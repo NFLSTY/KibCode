@@ -47,6 +47,9 @@ importers:
       fastify-plugin:
         specifier: ^6.0.0
         version: 6.0.0
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -63,9 +66,6 @@ importers:
       '@types/node':
         specifier: ^20.14.0
         version: 20.19.43
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
       typescript:
         specifier: ^5
         version: 5.9.3
