@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Footer } from "@/components/landing/Footer";
 import { KiboLogo } from "@/components/ui/KiboLogo";
+import { PageLoader } from "@/components/ui/PageLoader";
 import {
   ProfileHero,
   ProfileStats,
@@ -131,18 +132,7 @@ export default function ProfilePage() {
 
   // Loading state while verifying authentication
   if (authLoading || !student) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFBEB]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="animate-bounce">
-            <KiboLogo size={56} />
-          </div>
-          <span className="font-heading text-slate-700 font-bold text-sm">
-            Memuat profil petualangmu...
-          </span>
-        </div>
-      </div>
-    );
+    return <PageLoader message="Menyiapkan petualangan belajarmu..." />;
   }
 
   // Format real join date from database

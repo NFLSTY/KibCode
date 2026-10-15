@@ -120,6 +120,13 @@ export const api = {
       }),
     getModules: () =>
       fetcher<{ modules: any[] }>("/api/students/curriculum/modules"),
+    generateNextModule: () =>
+      fetcher<{ message: string; module: any; alreadyUnlocked?: boolean }>(
+        "/api/students/curriculum/advance-module",
+        {
+          method: "POST",
+        }
+      ),
     askTutor: (data: { message: string }) =>
       fetcher<{ reply: string; suggestedChips?: string[]; suggestedAction?: { label: string; href: string } }>(
         "/api/students/tutor/chat",

@@ -8,9 +8,11 @@ import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
 import { MilestoneOverview } from "@/components/dashboard/MilestoneOverview";
 import { DailyMissionsSection } from "@/components/dashboard/DailyMissionsSection";
 import { RecentLessons } from "@/components/dashboard/RecentLessons";
+import { RecentModules, type RecentModuleRecord } from "@/components/dashboard/RecentModules";
 import { AITutorBanner } from "@/components/dashboard/AITutorBanner";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { KiboLogo } from "@/components/ui/KiboLogo";
+import { PageLoader } from "@/components/ui/PageLoader";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { api } from "@/lib/api-client";
 import type { GameProgressDTO } from "@kibcode/types";
@@ -21,6 +23,7 @@ export default function StudentDashboardPage() {
 
   // Progress states initialized to real database defaults (0)
   const [progressList, setProgressList] = useState<GameProgressDTO[]>([]);
+  const [recentModules, setRecentModules] = useState<RecentModuleRecord[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [totalTimeMinutes, setTotalTimeMinutes] = useState(0);
@@ -77,20 +80,22 @@ export default function StudentDashboardPage() {
     };
   }, [student]);
 
+  // Load recent module records from localStorage
+  useEffect(() => {
+    if (typeof window === "undefined" || !student?.id) return;
+    try {
+      const saved = localStorage.getItem(`kibcode_recent_modules_${student.id}`);
+      if (saved) {
+        setRecentModules(JSON.parse(saved));
+      }
+    } catch {
+      // ignore
+    }
+  }, [student?.id]);
+
   // Loading state while verifying authentication
   if (authLoading || !student) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFBEB]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="animate-bounce">
-            <KiboLogo size={56} />
-          </div>
-          <span className="font-heading text-slate-700 font-bold text-sm">
-            Menyiapkan petualangan belajarmu...
-          </span>
-        </div>
-      </div>
-    );
+    return <PageLoader message="Menyiapkan petualangan belajarmu..." />;
   }
 
   const streakDays = completedCount > 0 ? 1 : 0;
@@ -124,7 +129,10 @@ export default function StudentDashboardPage() {
           totalScore={totalScore}
         />
 
-        {/* Section 4: Riwayat Pelajaran Terakhir (Real Database Records) */}
+        {/* Section 4.1: Riwayat Modul Belajar Terakhir */}
+        <RecentModules recentModules={recentModules} />
+
+        {/* Section 4.2: Riwayat Pelajaran Terakhir (Real Database Records) */}
         <RecentLessons progressList={progressList} />
 
         {/* Section 5: Kibo AI Tutor Spotlight Banner */}

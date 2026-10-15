@@ -7,6 +7,7 @@ import { Footer } from "@/components/landing/Footer";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { api } from "@/lib/api-client";
 import { KiboLogo } from "@/components/ui/KiboLogo";
+import { PageLoader } from "@/components/ui/PageLoader";
 import {
   Send,
   Sparkles,
@@ -49,7 +50,7 @@ function buildWelcome(name: string, id: string): ChatMessage {
 }
 
 export default function AITutorPage() {
-  const { student } = useAuth();
+  const { student, isLoading: authLoading } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +133,10 @@ export default function AITutorPage() {
     setInputText("");
   };
 
+  if (authLoading) {
+    return <PageLoader />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
       <DashboardNavbar />
@@ -147,10 +152,6 @@ export default function AITutorPage() {
             </div>
 
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/20 text-blue-100 text-[11px] font-bold">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
-                <span>Robot Kibo Aktif • Sahabat AI Koding SD</span>
-              </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl">
                 Tutor AI Robot Kibo
               </h1>

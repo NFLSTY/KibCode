@@ -3,6 +3,8 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { DashboardNavbar } from "@/components/dashboard/DashboardNavbar";
 import { Footer } from "@/components/landing/Footer";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { PageLoader } from "@/components/ui/PageLoader";
 import {
   Play,
   RotateCcw,
@@ -283,6 +285,7 @@ function runProgram(
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function CodingArenaPage() {
+  const { isLoading: authLoading } = useAuth();
   const [challengeIdx, setChallengeIdx] = useState(0);
   const challenge = CHALLENGES[challengeIdx] ?? CHALLENGES[0]!;
   const palette = buildPalette(challenge.defaultColor);
@@ -417,6 +420,10 @@ export default function CodingArenaPage() {
     }
     return depth;
   };
+
+  if (authLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
