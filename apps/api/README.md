@@ -18,21 +18,21 @@ Backend REST API untuk platform **KibCode** yang dibangun menggunakan framework 
 
 ---
 
-## 🤖 Integrasi AI: Google Gemini (`gemini-2.5-flash`)
+## 🤖 Integrasi AI: Google Gemini (Flash Models)
 
 Backend mengintegrasikan Google Gemini melalui `AIService` untuk menghasilkan konten edukasi yang dinamis, adaptif, dan ramah anak:
 
 1. **Dynamic Game Generation (`generateCodingGame`)**:
-   - Menghasilkan track game edukasi koding unik berbasis profil siswa (50% materi fundamental koding SD + 50% preferensi minat siswa seperti game, luar angkasa, sains, atau hewan).
-   - Menghasilkan narasi soal cerita bertahap, pilihan jawaban logis, dan penjelasan interaktif.
+   - Menghasilkan track game edukasi koding unik (10 soal per game) berbasis profil siswa (50% materi fundamental koding SD + 50% preferensi minat siswa seperti game, luar angkasa, sains, atau hewan).
+   - Menghasilkan narasi soal cerita bertahap, blok visual kode, pilihan jawaban logis, dan penjelasan interaktif.
 2. **AI Learning Modules (`generateLearningModule`)**:
-   - Menghasilkan unit-unit modul pembelajaran terstruktur dengan analogi kehidupan sehari-hari anak SD, tips koding Kibo, dan kuis pemahaman konsep.
+   - Menghasilkan unit-unit modul pembelajaran terstruktur 3 halaman dengan analogi kehidupan sehari-hari anak SD, tips koding Kibo, dan kuis pemahaman konsep.
    - Hasil generasi modul di-cache langsung di tabel database **Neon** (`LearningModule`) agar tidak menguras kuota API dan dapat diakses instan pada kunjungan berikutnya.
 3. **AI Tutor Robot Kibo (`chatWithTutor`)**:
    - Asisten AI pintar ramah anak dengan *guardrail* edukatif (tidak pernah memberikan jawaban koding langsung secara mentah, melainkan membimbing langkah demi langkah).
    - Riwayat sesi obrolan disimpan di tabel **Neon** (`TutorSession` & `TutorMessage`) dan dapat di-reset kapan saja oleh siswa.
 4. **Resilient Fallback Mechanism**:
-   - Jika terjadi kendala kuota rate limit atau kegagalan jaringan eksternal ke Gemini, backend secara cerdas beralih ke *fallback catalog* terstruktur sehingga siswa tetap dapat belajar tanpa gangguan (*zero-downtime learning*).
+   - Jika terjadi kendala kuota rate limit atau kegagalan jaringan eksternal ke Gemini, backend secara cerdas beralih ke *fallback catalog* terstruktur ([gameFallbackData.ts](src/services/gameFallbackData.ts)) sehingga siswa tetap dapat belajar tanpa gangguan (*zero-downtime learning*).
 
 ---
 
@@ -56,6 +56,7 @@ apps/api/
 │   │   └── progressController.ts    # Penanganan metrik perkembangan
 │   ├── services/
 │   │   ├── aiService.ts             # Orkestrasi Google Gemini API
+│   │   ├── gameFallbackData.ts      # Bank 10 soal fallback terstruktur per kategori
 │   │   ├── curriculumService.ts     # Engine kurikulum & caching modul Neon
 │   │   ├── gameService.ts           # Logika game & penyimpanan riwayat
 │   │   └── studentService.ts        # Autentikasi & manajemen akun

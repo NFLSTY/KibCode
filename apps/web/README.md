@@ -34,20 +34,21 @@ Dirancang khusus untuk siswa Sekolah Dasar (usia 7–12 tahun) dengan antarmuka 
 - Target mingguan dan rekomendasi misi tantangan harian.
 
 ### 4. **Game Edukasi Koding (`/games`)**
-- Daftar lintasan koding dinamis hasil generasi AI yang disesuaikan dengan preferensi siswa.
-- Filter kategori koding dengan navigasi panah geser horizontal yang intuitif bagi anak SD.
-- Status progres real-time per game (Belum Dimulai, Sedang Berjalan, Selesai).
+- Daftar lintasan koding dinamis hasil generasi AI (10 soal per game) yang disesuaikan dengan preferensi minat siswa.
+- Filter kategori koding berbasis ikon Lucide dengan navigasi panah geser horizontal dan opsi urutan cerdas.
+- Tombol maskot Kibo interaktif dengan modal statistik penguasaan bintang (Level 1, 2, dan 3).
+- Status progres real-time per game card (Selesai X%, Rekor Skor, tombol "Lanjut Main" atau "Main Lagi").
 
 ### 5. **Arena Kuis Koding Interaktif (`/games/[gameId]`)**
-- Papan soal koding besar dengan visual blok perintah yang mudah dipahami.
-- Opsi jawaban kartu interaktif dengan umpan balik suara visual seketika.
-- *Progress bar* cerdas yang bertambah proporsional setelah pertanyaan dijawab.
-- Penjelasan edukatif di setiap akhir soal untuk memahamkan konsep logika.
+- 10 tantangan logika koding bertingkat dari observasi konsep, tracing alur kode, hingga pemecahan teka-teki.
+- Penyimpanan progres otomatis: jika siswa keluar di tengah kuis, kuis dapat dilanjutkan dari nomor soal terakhir.
+- Opsi jawaban kartu taktil interaktif dengan penjelasan edukatif ramah anak di setiap akhir soal.
+- Tombol petunjuk pintar Kibo AI (*Ask Kibo AI Hint*) dan papan coretan logika siswa.
 
 ### 6. **Modul Belajar Koding (`/kurikulum`)**
-- Kurikulum koding terstruktur yang diperkaya oleh AI Gemini dengan materi mendalam dan analogi dunia nyata anak-anak.
-- Data materi di-cache di database **Neon** melalui backend, sehingga proses pemuatan modul berlangsung sangat cepat.
-- Dilengkapi kuis mini pemahaman materi dan tips trik koding dari Robot Kibo.
+- 18 modul kurikulum koding SD berjenjang terstruktur dengan pola 3 halaman (Konsep & Analogi Dunia Nyata, Contoh Kode & Eksplorasi, serta Kuis Validasi Kelulusan).
+- Data modul di-cache di database **Neon** melalui backend untuk pemuatan instan.
+- Syarat kelulusan kuis modul yang ketat (maksimal 1 kesalahan) untuk membuka modul berikutnya secara berurutan.
 
 ### 7. **Arena Koding: Pixel Pattern Builder (`/coding`)**
 - Ruang praktik logika koding kreatif di luar kuis pilihan ganda.

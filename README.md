@@ -28,9 +28,9 @@ Melalui pendekatan pembelajaran adaptif berbasis kecerdasan buatan (**Google Gem
 1. **Onboarding Cerdas & Adaptif**
    - Menangkap jenjang kelas SD, minat favorit (Game, Sains, Luar Angkasa, Hewan), serta tingkat kemahiran koding awal siswa untuk menyusun materi yang seimbang.
 2. **Game Edukasi Koding Berbasis AI**
-   - Tantangan logika yang dibuat secara cerdas oleh AI: mengombinasikan 50% kurikulum fundamental koding SD dengan 50% preferensi tema kesukaan siswa.
-3. **Modul Belajar Koding Berjenjang**
-   - Materi konsep koding bertingkat (Algoritma, Loop, If-Else, Variabel, Pola Pikir Komputasi, dan Pengenalan AI) yang dilengkapi analogi dunia nyata anak SD, tips Robot Kibo, dan kuis mini. Hasil generasi materi di-cache di database **Neon** agar dapat dibuka seketika.
+   - Tantangan logika interaktif (10 soal per game) yang dirancang cerdas oleh AI: mengombinasikan 50% kurikulum fundamental koding SD dengan 50% preferensi minat siswa. Dilengkapi penyimpanan sesi otomatis (dapat melanjutkan dari nomor terakhir jika berhenti di tengah jalan), tinjauan performa Kibo, dan statistik pencapaian bintang (Level 1, 2, 3).
+3. **Modul Belajar Koding Berjenjang (18 Modul)**
+   - Kurikulum koding bertingkat dengan pola 3 halaman (konsep & analogi dunia nyata, contoh kode interaktif, dan kuis validasi pemahaman dengan syarat kelulusan maksimal 1 kesalahan). Hasil generasi materi di-cache di database **Neon** agar dapat dibuka seketika.
 4. **Arena Koding: Pixel Pattern Builder**
    - Ruang praktik logika interaktif di mana anak menyusun blok perintah visual (Maju, Warnai Pixel, Putar, dan Ulangi) untuk melukis pola seni piksel (*pixel art*).
 5. **Sahabat AI: Tutor Robot Kibo**
@@ -49,7 +49,7 @@ Melalui pendekatan pembelajaran adaptif berbasis kecerdasan buatan (**Google Gem
 | **Backend** | **Fastify + TypeScript** | Server REST API performa tinggi, middleware JWT, Zod validation |
 | **Database** | **PostgreSQL (Neon Serverless)** | Database cloud serverless dengan pooling koneksi yang aman & cepat |
 | **ORM** | **Prisma ORM** | Schema migration, query builder type-safe, dan data modeling |
-| **AI Engine** | **Google Gemini (`gemini-2.5-flash`)** | Generasi tantangan koding adaptif, modul materi, & asisten Robot Kibo |
+| **AI Engine** | **Google Gemini (Flash Models)** | Generasi tantangan koding adaptif, modul materi, & asisten Robot Kibo |
 
 ---
 
@@ -173,6 +173,40 @@ Aplikasi akan otomatis aktif pada:
 - **Backend (API)**: `http://localhost:3001`
 - **Healthcheck API**: `http://localhost:3001/api/health`
 
+### 6. Panduan Deployment Produksi (Platform-Agnostik)
+
+KibCode dirancang fleksibel untuk dideploy pada platform cloud pilihanmu (Docker, VPS, PaaS, atau Container Serverless):
+
+#### A. Membangun Bundle Produksi
+```bash
+# Build seluruh workspace melalui Turborepo
+pnpm build
+```
+
+#### B. Konfigurasi Environment Produksi
+Pastikan variabel lingkungan berikut diset pada platform hosting kamu:
+
+1. **Layanan Backend (`apps/api`)**:
+   - `DATABASE_URL`: Connection string Neon PostgreSQL dengan SSL (`postgresql://...?sslmode=require`).
+   - `JWT_SECRET`: String acak aman minimal 32 karakter untuk penandatanganan token JWT.
+   - `PORT`: Port yang disediakan platform (default: `3001`, server otomatis mengikat ke `0.0.0.0`).
+   - `CORS_ORIGIN`: Domain publik frontend web produksi kamu (contoh: `https://edukids.com`).
+   - `GEMINI_API_KEY`: Kunci API Google Gemini (mendukung round-robin multi-key dengan koma: `key1,key2`).
+
+2. **Layanan Frontend (`apps/web`)**:
+   - `NEXT_PUBLIC_API_URL`: URL publik dari layanan backend kamu (contoh: `https://api.edukids.com`). Next.js secara otomatis merutekan panggilan `/api/*` ke URL ini.
+
+#### C. Menjalankan Layanan di Server Produksi
+- **Menjalankan Backend**:
+  ```bash
+  pnpm --filter @kibcode/api start
+  # atau langsung: node apps/api/dist/index.js
+  ```
+- **Menjalankan Frontend**:
+  ```bash
+  pnpm --filter @kibcode/web start
+  ```
+
 ---
 
 ## 📜 Daftar Skrip Monorepo
@@ -184,6 +218,7 @@ Aplikasi akan otomatis aktif pada:
 | `pnpm check-types` | Melakukan verifikasi tipe TypeScript ketat di seluruh monorepo |
 | `pnpm lint` | Menjalankan pemeriksaan ESLint di seluruh workspace |
 | `pnpm format` | Menyelaraskan format kode dengan Prettier |
+| `pnpm --filter @kibcode/database db:generate` | Membuat skema tabel `schema.prisma` untuk database |
 | `pnpm --filter @kibcode/database db:push` | Menyinkronkan model `schema.prisma` ke database **Neon** |
 | `pnpm --filter @kibcode/database db:studio` | Membuka antarmuka visual Prisma Studio di peramban |
 
