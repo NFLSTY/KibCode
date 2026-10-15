@@ -2,7 +2,7 @@ import { buildServer } from "./server.js";
 
 async function main() {
   const server = await buildServer();
-  const port = Number(process.env.PORT) || 3001;
+  const port = Number(process.env.API_PORT || (process.env.PORT === "3000" ? 3001 : process.env.PORT)) || 3001;
   const host = process.env.HOST || "0.0.0.0";
 
   const signals: NodeJS.Signals[] = ["SIGINT", "SIGTERM"];
