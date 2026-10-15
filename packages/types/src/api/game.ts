@@ -2,6 +2,7 @@ export type GameCategory =
   | "logic"
   | "loops"
   | "conditionals"
+  | "variables"
   | "debugging"
   | "algorithms"
   | "general"
@@ -32,6 +33,7 @@ export interface GameDTO {
   difficulty: number;
   description: string;
   questions?: QuizQuestionDTO[];
+  studentId?: string | null;
 }
 
 export interface CreateGameDTO {
@@ -40,6 +42,7 @@ export interface CreateGameDTO {
   difficulty: number;
   description: string;
   questions?: QuizQuestionDTO[];
+  studentId?: string | null;
 }
 
 export interface GenerateGameRequestDTO {
@@ -47,6 +50,12 @@ export interface GenerateGameRequestDTO {
   category?: GameCategory;
   grade?: number;
   difficulty?: number;
+  studentId?: string;
+}
+
+export interface GenerateCurriculumDTO {
+  studentId?: string;
+  domain?: "games" | "modules";
 }
 
 export interface AskHintRequestDTO {

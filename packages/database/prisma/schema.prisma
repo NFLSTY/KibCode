@@ -19,8 +19,11 @@ model Student {
   favoriteInterest String?
   learningGoal     String?
   isOnboarded      Boolean          @default(false)
+  games            Game[]
   progress         GameProgress[]
   sessions         StudentSession[]
+  tutorSession     TutorSession?
+  learningModules  LearningModule[]
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt @default(now())
 }
@@ -46,7 +49,11 @@ model Game {
   difficulty  Int
   description String
   questions   Json?
+  studentId   String?
+  student     Student?       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   progress    GameProgress[]
+
+  @@index([studentId])
 }
 
 model GameProgress {
@@ -59,4 +66,38 @@ model GameProgress {
   duration  Int
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model TutorSession {
+  id        String         @id @default(cuid())
+  student   Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String         @unique // one active session per student
+  messages  TutorMessage[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([studentId])
+}
+
+model TutorMessage {
+  id        String       @id @default(cuid())
+  session   TutorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  sender    String       // "user" | "kibo"
+  text      String       @db.Text
+  createdAt DateTime     @default(now())
+
+  @@index([sessionId])
+}
+
+model LearningModule {
+  id        String   @id @default(cuid())
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  category  String
+  data      Json     // Full AI-generated module JSON
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, category])
+  @@index([studentId])
 }
