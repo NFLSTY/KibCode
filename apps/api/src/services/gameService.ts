@@ -15,19 +15,28 @@ import { aiService } from "./aiService.js";
 export class GameService {
   constructor(private prisma: PrismaClient) {}
 
-  async getAll(category?: GameCategory): Promise<GameDTO[]> {
+  async getAll(category?: GameCategory, studentId?: string): Promise<GameDTO[]> {
+    const whereClause: any = {};
+    if (category && category !== ("all" as GameCategory)) {
+      whereClause.category = category;
+    }
+    if (studentId) {
+      whereClause.OR = [{ studentId }, { studentId: null }];
+    }
+
     const games = await this.prisma.game.findMany({
-      where: category && category !== ("all" as GameCategory) ? { category } : undefined,
+      where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
       orderBy: { difficulty: "asc" },
     });
 
     return games.map((game) => ({
       id: game.id,
-      title: game.title,
+      title: game.title.replace(/^Tantangan\s+Logika\s*:\s*/i, "").trim(),
       category: game.category as GameCategory,
       difficulty: game.difficulty,
       description: game.description,
       questions: (game.questions as unknown as QuizQuestionDTO[]) || undefined,
+      studentId: game.studentId,
     }));
   }
 
@@ -40,11 +49,12 @@ export class GameService {
 
     return {
       id: game.id,
-      title: game.title,
+      title: game.title.replace(/^Tantangan\s+Logika\s*:\s*/i, "").trim(),
       category: game.category as GameCategory,
       difficulty: game.difficulty,
       description: game.description,
       questions: (game.questions as unknown as QuizQuestionDTO[]) || undefined,
+      studentId: game.studentId,
     };
   }
 
@@ -56,6 +66,7 @@ export class GameService {
         difficulty: data.difficulty,
         description: data.description,
         questions: data.questions as any,
+        studentId: data.studentId || null,
       },
     });
 
@@ -66,6 +77,7 @@ export class GameService {
       difficulty: game.difficulty,
       description: game.description,
       questions: (game.questions as unknown as QuizQuestionDTO[]) || undefined,
+      studentId: game.studentId,
     };
   }
 
@@ -78,8 +90,11 @@ export class GameService {
       difficulty: params.difficulty,
     });
 
-    // 2. Persist directly to Neon DB
-    return this.create(createdData);
+    // 2. Persist directly to Neon DB with student ownership if applicable
+    return this.create({
+      ...createdData,
+      studentId: params.studentId || null,
+    });
   }
 
   async getHint(params: AskHintRequestDTO): Promise<AskHintResponseDTO> {

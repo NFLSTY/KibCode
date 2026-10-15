@@ -10,9 +10,9 @@ import type { GameCategory } from "@kibcode/types";
 
 export class GameController {
   static async getAll(request: FastifyRequest, reply: FastifyReply) {
-    const { category } = request.query as { category?: GameCategory };
+    const { category, studentId } = request.query as { category?: GameCategory; studentId?: string };
     const service = new GameService(request.server.prisma);
-    const games = await service.getAll(category);
+    const games = await service.getAll(category, studentId);
     return reply.send({ games });
   }
 
