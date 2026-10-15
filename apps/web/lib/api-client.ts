@@ -110,15 +110,34 @@ export const api = {
   students: {
     getMe: () => fetcher<{ student: StudentDTO }>("/api/students/me"),
     updateOnboarding: (data: UpdateOnboardingDTO) =>
-      fetcher<{ message: string; student: StudentDTO }>("/api/students/onboarding", {
+      fetcher<{ message: string; student: StudentDTO; games?: GameDTO[] }>("/api/students/onboarding", {
         method: "PUT",
         body: JSON.stringify(data),
       }),
+    generateCurriculum: () =>
+      fetcher<{ message: string; games: GameDTO[] }>("/api/students/curriculum/generate", {
+        method: "POST",
+      }),
+    getModules: () =>
+      fetcher<{ modules: any[] }>("/api/students/curriculum/modules"),
+    askTutor: (data: { message: string }) =>
+      fetcher<{ reply: string; suggestedChips?: string[]; suggestedAction?: { label: string; href: string } }>(
+        "/api/students/tutor/chat",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      ),
+    clearTutorSession: () =>
+      fetcher<{ success: boolean }>("/api/students/tutor/session", { method: "DELETE" }),
   },
   games: {
-    getAll: (category?: GameCategory) => {
-      const query = category ? `?category=${category}` : "";
-      return fetcher<{ games: GameDTO[] }>(`/api/games${query}`);
+    getAll: (category?: GameCategory, studentId?: string) => {
+      const params = new URLSearchParams();
+      if (category && category !== ("all" as GameCategory)) params.set("category", category);
+      if (studentId) params.set("studentId", studentId);
+      const qs = params.toString() ? `?${params.toString()}` : "";
+      return fetcher<{ games: GameDTO[] }>(`/api/games${qs}`);
     },
     getById: (id: string) => fetcher<{ game: GameDTO }>(`/api/games/${id}`),
     generate: (data: { topic: string; category?: GameCategory; grade?: number; difficulty?: number }) =>
