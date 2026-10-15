@@ -106,6 +106,7 @@ export default function StudentDashboardPage() {
           grade={student.grade}
           streakDays={streakDays}
           totalStars={totalScore}
+          studentId={student.id}
         />
 
         {/* Section 2: Weekly Target & Stats Overview */}

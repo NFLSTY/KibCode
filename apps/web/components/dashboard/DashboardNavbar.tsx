@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { KiboLogo } from "@/components/ui/KiboLogo";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { useStudentAvatar } from "@/components/profile";
 import { showToast } from "nextjs-toast-notify";
 
 interface DashboardNavbarProps {
@@ -29,6 +30,7 @@ export function DashboardNavbar({
   const pathname = usePathname();
   const router = useRouter();
   const { student, logout } = useAuth();
+  const avatar = useStudentAvatar(student?.id);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -133,11 +135,13 @@ export function DashboardNavbar({
               <button
                 type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center font-heading text-sm font-black shadow-sm ring-2 ring-white hover:ring-blue-200 transition-all cursor-pointer select-none"
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full p-0.5 bg-gradient-to-tr ${avatar.bgGradient} shadow-sm ring-2 ring-white hover:ring-blue-300 transition-all cursor-pointer select-none flex items-center justify-center shrink-0`}
                 aria-label="Menu Profil Siswa"
                 aria-expanded={dropdownOpen}
               >
-                {student.name.charAt(0).toUpperCase()}
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-sm sm:text-base select-none shadow-inner border border-white">
+                  {avatar.icon}
+                </div>
               </button>
 
               {/* Profile Dropdown with Full Details */}
@@ -146,8 +150,10 @@ export function DashboardNavbar({
                   {/* Student Summary in Dropdown */}
                   <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col gap-2">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-heading text-base font-black shadow-xs shrink-0">
-                        {student.name.charAt(0).toUpperCase()}
+                      <div className={`w-11 h-11 rounded-full p-0.5 bg-gradient-to-tr ${avatar.bgGradient} shadow-xs shrink-0 flex items-center justify-center`}>
+                        <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-xl select-none shadow-inner border border-white">
+                          {avatar.icon}
+                        </div>
                       </div>
                       <div className="flex flex-col text-left overflow-hidden">
                         <span className="font-heading text-sm font-black text-slate-800 truncate">
@@ -241,8 +247,10 @@ export function DashboardNavbar({
           {student ? (
             <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-heading text-base font-black shadow-xs">
-                  {student.name.charAt(0).toUpperCase()}
+                <div className={`w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr ${avatar.bgGradient} shadow-xs flex items-center justify-center shrink-0`}>
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-lg select-none shadow-inner border border-white">
+                    {avatar.icon}
+                  </div>
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="font-heading text-sm font-black text-slate-800">

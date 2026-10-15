@@ -79,6 +79,7 @@ export default function ProfilePage() {
     setCurrentAvatar(avatar);
     if (student) {
       localStorage.setItem(`kibcode_avatar_${student.id}`, avatar.id);
+      window.dispatchEvent(new Event("avatar_updated"));
     }
     showToast.success(`Karakter ${avatar.name} siap menemanimu bertualang! 🌟`, {
       position: "top-right",

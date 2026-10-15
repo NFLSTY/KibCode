@@ -2,12 +2,14 @@
 
 import React from "react";
 import { Flame, Star, Award } from "lucide-react";
+import { useStudentAvatar } from "@/components/profile";
 
 interface DashboardGreetingProps {
   name: string;
   grade: number;
   streakDays: number;
   totalStars: number;
+  studentId?: string;
 }
 
 export function DashboardGreeting({
@@ -15,8 +17,10 @@ export function DashboardGreeting({
   grade,
   streakDays,
   totalStars,
+  studentId,
 }: DashboardGreetingProps) {
   const currentLevel = Math.max(1, Math.floor(totalStars / 200) + 1);
+  const avatar = useStudentAvatar(studentId);
 
   return (
     <section className="relative overflow-hidden bg-white rounded-3xl p-6 sm:p-7 md:p-8 shadow-[0_10px_24px_-4px_rgba(30,41,59,0.08)] border border-slate-100">
@@ -27,10 +31,11 @@ export function DashboardGreeting({
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         {/* Left: Student Avatar & Wrapped Greeting Text */}
         <div className="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
-          <div className="relative shrink-0">
-            <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-amber-100 flex items-center justify-center p-1.5 shadow-inner border-2 border-amber-300">
-              <div className="w-full h-full rounded-full bg-blue-600 text-white flex items-center justify-center font-heading text-2xl sm:text-3xl font-black shadow-sm select-none">
-                {name ? name.charAt(0).toUpperCase() : "P"}
+          {/* Avatar Picture: hidden in responsive/mobile mode (< sm) as it's already shown in navbar */}
+          <div className="hidden sm:flex relative shrink-0">
+            <div className={`w-18 h-18 sm:w-20 sm:h-20 rounded-full p-1 bg-gradient-to-tr ${avatar.bgGradient} shadow-md flex items-center justify-center`}>
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-3xl sm:text-4xl select-none shadow-inner border-2 border-white">
+                {avatar.icon}
               </div>
             </div>
           </div>

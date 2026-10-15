@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { X, Check } from "lucide-react";
 import type { AvatarOption } from "./types";
 
@@ -54,6 +54,44 @@ export const AVATAR_OPTIONS: AvatarOption[] = [
     borderColor: "border-amber-500",
   },
 ];
+
+export function getSavedAvatar(studentId?: string): AvatarOption {
+  if (typeof window === "undefined" || !studentId) {
+    return AVATAR_OPTIONS[0]!;
+  }
+  try {
+    const savedAvatarId = localStorage.getItem(`kibcode_avatar_${studentId}`);
+    if (savedAvatarId) {
+      const found = AVATAR_OPTIONS.find((a) => a.id === savedAvatarId);
+      if (found) return found;
+    }
+  } catch {
+    // Local storage unavailable fallback
+  }
+  return AVATAR_OPTIONS[0]!;
+}
+
+export function useStudentAvatar(studentId?: string): AvatarOption {
+  const [avatar, setAvatar] = useState<AvatarOption>(() => getSavedAvatar(studentId));
+
+  useEffect(() => {
+    if (!studentId || typeof window === "undefined") return;
+    setAvatar(getSavedAvatar(studentId));
+
+    const handleUpdate = () => {
+      setAvatar(getSavedAvatar(studentId));
+    };
+
+    window.addEventListener("avatar_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("avatar_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, [studentId]);
+
+  return avatar;
+}
 
 interface AvatarPickerModalProps {
   isOpen: boolean;

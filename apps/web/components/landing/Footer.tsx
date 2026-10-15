@@ -1,9 +1,13 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { KiboLogo } from "@/components/ui/KiboLogo";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 export function Footer() {
+  const { student } = useAuth();
+
   return (
     <footer className="w-full bg-slate-100 border-t border-slate-200/80 pt-14 pb-10">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
@@ -48,9 +52,11 @@ export function Footer() {
               <a href="#fitur" className="hover:text-blue-600 transition-colors">
                 Keunggulan Platform
               </a>
-              <Link href="/register" className="hover:text-blue-600 font-bold text-amber-600 transition-colors">
-                Daftar Akun Baru
-              </Link>
+              {!student && (
+                <Link href="/register" className="hover:text-blue-600 font-bold text-amber-600 transition-colors">
+                  Daftar Akun Baru
+                </Link>
+              )}
             </div>
           </div>
 
