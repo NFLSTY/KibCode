@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Brain, HelpCircle, Pencil, X, Sparkles, Loader2, Code2, Bot } from "lucide-react";
 import type { QuizQuestion } from "@/lib/constants/quiz-questions";
 import { api } from "@/lib/api-client";
@@ -8,13 +8,24 @@ import { api } from "@/lib/api-client";
 interface QuestionBoardProps {
   question: QuizQuestion;
   grade?: number;
+  gameTitle?: string;
 }
 
-export function QuestionBoard({ question, grade = 3 }: QuestionBoardProps) {
+export function QuestionBoard({
+  question,
+  grade = 3,
+  gameTitle,
+}: QuestionBoardProps) {
   const [showScratchpad, setShowScratchpad] = useState(false);
   const [scratchNotes, setScratchNotes] = useState("");
   const [aiHint, setAiHint] = useState<string | null>(null);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
+
+  // Reset hint when switching to another question
+  useEffect(() => {
+    setAiHint(null);
+    setShowScratchpad(false);
+  }, [question.id, question.question]);
 
   // Ask Gemini AI for real-time hint
   const handleAskAI = async () => {
@@ -37,10 +48,10 @@ export function QuestionBoard({ question, grade = 3 }: QuestionBoardProps) {
 
   return (
     <div className="flex-1 text-center md:text-left">
-      {/* Motivational Prompt Pill */}
-      <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3.5 py-1 rounded-full mb-3 font-heading text-xs sm:text-sm font-bold border border-blue-100">
-        <Brain className="w-4 h-4 text-blue-600" />
-        <span>Tantangan Logika Koding Kibo SD:</span>
+      {/* Mission Title Pill following from game.title */}
+      <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full mb-3 font-heading text-xs sm:text-sm font-bold border border-blue-200 shadow-2xs">
+        <Brain className="w-4 h-4 text-blue-600 shrink-0" />
+        <span className="truncate max-w-xl">{gameTitle || "Misi Game Edukasi Kibo"}</span>
       </div>
 
       {/* Story / Context Scenario */}

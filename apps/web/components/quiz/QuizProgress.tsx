@@ -6,11 +6,19 @@ import { Flag } from "lucide-react";
 interface QuizProgressProps {
   currentIndex: number;
   totalQuestions: number;
+  isCurrentAnswered?: boolean;
 }
 
-export function QuizProgress({ currentIndex, totalQuestions }: QuizProgressProps) {
-  const currentNumber = currentIndex + 1;
-  const progressPercent = Math.round((currentNumber / totalQuestions) * 100);
+export function QuizProgress({
+  currentIndex,
+  totalQuestions,
+  isCurrentAnswered = false,
+}: QuizProgressProps) {
+  // Starts with 0%, increases only after the question is answered (same logic as onboarding)
+  const answeredCount = isCurrentAnswered ? currentIndex + 1 : currentIndex;
+  const currentNumber = Math.min(currentIndex + 1, totalQuestions);
+  const progressPercent =
+    totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
 
   return (
     <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-[0_8px_20px_-4px_rgba(30,41,59,0.06)] mb-6">
@@ -32,7 +40,9 @@ export function QuizProgress({ currentIndex, totalQuestions }: QuizProgressProps
           className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-1 shadow-inner"
           style={{ width: `${progressPercent}%` }}
         >
-          <div className="w-3.5 h-3.5 bg-white rounded-full animate-pulse shadow-sm" />
+          {progressPercent > 0 && (
+            <div className="w-3.5 h-3.5 bg-white rounded-full animate-pulse shadow-sm" />
+          )}
         </div>
       </div>
     </div>

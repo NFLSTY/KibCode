@@ -72,10 +72,21 @@ export function GameCard({ game }: GameCardProps) {
           progressBar: "bg-rose-500",
           cardBorder: "border-rose-100 hover:border-rose-300",
         };
-      case "algorithms":
+      case "variables":
         return {
           name: "Variabel & Data",
           icon: Box,
+          bannerBg: "bg-teal-600",
+          tagBg: "bg-teal-700 text-white",
+          btnColor:
+            "bg-teal-600 hover:bg-teal-700 text-white shadow-[0_4px_0_#0F766E]",
+          progressBar: "bg-teal-600",
+          cardBorder: "border-teal-100 hover:border-teal-300",
+        };
+      case "algorithms":
+        return {
+          name: "Algoritma Solusi",
+          icon: PieChart,
           bannerBg: "bg-emerald-600",
           tagBg: "bg-emerald-700 text-white",
           btnColor:

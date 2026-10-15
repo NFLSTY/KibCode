@@ -59,7 +59,7 @@ export function CatalogHero({
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-amber-950 font-heading text-xs sm:text-sm font-black shadow-[0_3px_0_#B45309] active:translate-y-1 transition-all cursor-pointer"
               >
                 <Wand2 className="w-4 h-4 fill-amber-950" />
-                <span>Rakit Game Baru dengan AI ✨</span>
+                <span>Rakit Game Baru dengan AI</span>
               </button>
             )}
           </div>

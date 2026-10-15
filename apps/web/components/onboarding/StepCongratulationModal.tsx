@@ -280,7 +280,7 @@ export function StepCongratulationModal({
             disabled={isSubmitting}
             icon={<Rocket className="w-5 h-5" />}
           >
-            {isSubmitting ? "Menyiapkan Petualangan..." : "Mulai Belajar Sekarang!"}
+            {isSubmitting ? "Menyiapkan Petualanganmu..." : "Mulai Belajar Sekarang!"}
           </CTAButton>
         </div>
       </div>

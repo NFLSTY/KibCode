@@ -88,7 +88,7 @@ export function StepSchool({ schoolName, onChangeSchool }: StepSchoolProps) {
         <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5 mt-2 flex items-start gap-3">
           <span className="text-xl shrink-0">💡</span>
           <p className="text-xs text-amber-900 leading-relaxed font-semibold">
-            Informasi ini hanya digunakan untuk menampilkan nama sekolahmu di kartu petualang dan sertifikat prestasi. Aman & terlindungi!
+            Informasi ini hanya digunakan untuk menampilkan nama sekolahmu di kartu petualang sebagai informasi. Aman & terlindungi!
           </p>
         </div>
       </div>

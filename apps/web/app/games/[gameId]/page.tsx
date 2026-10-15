@@ -6,17 +6,16 @@ import { DashboardNavbar } from "@/components/dashboard/DashboardNavbar";
 import { Footer } from "@/components/landing/Footer";
 import { QuizHeader } from "@/components/quiz/QuizHeader";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
-import { KiboMascot } from "@/components/quiz/KiboMascot";
 import { QuestionBoard } from "@/components/quiz/QuestionBoard";
 import { AnswerGrid } from "@/components/quiz/AnswerGrid";
 import { FeedbackBanner } from "@/components/quiz/FeedbackBanner";
 import { QuizCompletedModal } from "@/components/quiz/QuizCompletedModal";
-import { DEFAULT_CATALOG_GAMES } from "@/lib/constants/catalog-games";
-import { getQuestionsForGame, type QuizQuestion } from "@/lib/constants/quiz-questions";
+import type { QuizQuestion } from "@/lib/constants/quiz-questions";
 import { api } from "@/lib/api-client";
 import { useAuth } from "@/lib/hooks/useAuth";
 import type { GameCategory } from "@kibcode/types";
-import { HeartHandshake, Smile } from "lucide-react";
+import { HeartHandshake, Smile, Loader2, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 interface GameArenaProps {
   params: Promise<{ gameId: string }>;
@@ -28,15 +27,10 @@ export default function GameArenaPage({ params }: GameArenaProps) {
   const router = useRouter();
   const { student } = useAuth();
 
-  // Find game info or use default
-  const defaultGame = DEFAULT_CATALOG_GAMES.find((g) => g.id === gameId);
-  const [gameTitle, setGameTitle] = useState(defaultGame ? defaultGame.title : "Petualangan Koding Kibo");
-  const [category, setCategory] = useState<GameCategory>(defaultGame ? defaultGame.category : "logic");
-
-  // Questions
-  const [questions, setQuestions] = useState<QuizQuestion[]>(() =>
-    getQuestionsForGame(gameId, defaultGame?.category || "logic")
-  );
+  const [gameTitle, setGameTitle] = useState("Petualangan Koding Kibo");
+  const [category, setCategory] = useState<GameCategory>("logic");
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Quiz state
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -54,18 +48,22 @@ export default function GameArenaPage({ params }: GameArenaProps) {
     let isMounted = true;
     async function fetchGame() {
       try {
+        setIsLoading(true);
         const res = await api.games.getById(gameId);
         if (isMounted && res.game) {
-          setGameTitle(res.game.title);
+          const sanitizedTitle = res.game.title
+            .replace(/^Tantangan\s+Logika\s*:\s*/i, "")
+            .trim();
+          setGameTitle(sanitizedTitle);
           setCategory(res.game.category);
           if (res.game.questions && res.game.questions.length > 0) {
             setQuestions(res.game.questions as QuizQuestion[]);
-          } else {
-            setQuestions(getQuestionsForGame(gameId, res.game.category));
           }
         }
       } catch (err) {
-        // Fallback already provided
+        console.error("Failed to fetch game:", err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     }
 
@@ -76,14 +74,46 @@ export default function GameArenaPage({ params }: GameArenaProps) {
     };
   }, [gameId]);
 
-  const currentQuestion = questions[currentIndex] ?? questions[0];
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
+        <DashboardNavbar />
+        <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+            <p className="font-heading font-bold text-slate-700">
+              Robot Kibo sedang menyiapkan game edukasimu...
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentIndex];
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFBEB]">
-        <p className="font-heading font-bold text-slate-600">
-          Menyiapkan arena permainan...
-        </p>
+      <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
+        <DashboardNavbar />
+        <main className="flex-1 w-full max-w-xl mx-auto px-4 sm:px-6 pt-36 pb-16 flex flex-col items-center text-center">
+          <span className="text-5xl mb-4">🎮</span>
+          <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2">
+            Game Edukasi Tidak Ditemukan
+          </h2>
+          <p className="text-slate-600 text-sm mb-6">
+            Game edukasi ini belum tersedia atau sedang dirancang oleh Robot Kibo.
+          </p>
+          <Link
+            href="/games"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-sm px-6 py-3 rounded-full shadow-[0_4px_0_#1D4ED8] active:translate-y-1 transition-all"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Kembali ke Game Edukasi</span>
+          </Link>
+        </main>
+        <Footer />
       </div>
     );
   }
@@ -128,13 +158,6 @@ export default function GameArenaPage({ params }: GameArenaProps) {
     setIsCompleted(false);
   };
 
-  const mascotMood =
-    selectedOptionId === null
-      ? "idle"
-      : isCurrentCorrect
-      ? "happy"
-      : "thinking";
-
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBEB] text-[#1E293B]">
       <DashboardNavbar />
@@ -150,10 +173,11 @@ export default function GameArenaPage({ params }: GameArenaProps) {
           onExit={() => router.push("/games")}
         />
 
-        {/* Progress Bar */}
+        {/* Progress Bar (Starts with 0, advances when question answered) */}
         <QuizProgress
           currentIndex={currentIndex}
           totalQuestions={questions.length}
+          isCurrentAnswered={selectedOptionId !== null}
         />
 
         {/* Quiz Arena Card Container */}
@@ -162,10 +186,13 @@ export default function GameArenaPage({ params }: GameArenaProps) {
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-blue-100/50 rounded-full blur-2xl pointer-events-none" />
           <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-amber-100/50 rounded-full blur-2xl pointer-events-none" />
 
-          {/* Question Area Header with Kibo Mascot */}
-          <div className="relative flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
-            <KiboMascot mood={mascotMood} />
-            <QuestionBoard question={currentQuestion} grade={student?.grade || 3} />
+          {/* Question Area (Full Width - Kibo Pensil removed as requested) */}
+          <div className="relative mb-8">
+            <QuestionBoard
+              question={currentQuestion}
+              grade={student?.grade || 3}
+              gameTitle={gameTitle}
+            />
           </div>
 
           {/* Answer Choices */}
